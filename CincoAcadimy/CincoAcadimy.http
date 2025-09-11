@@ -1,0 +1,6 @@
+@CincoAcadimy_HostAddress = http://localhost:5031
+
+GET {{CincoAcadimy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
