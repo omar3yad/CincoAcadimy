@@ -10,5 +10,10 @@ namespace CincoAcadimy.Service
         Task<SessionDto> AddAsync(AddSessionDto dto);
         Task<SessionDto> UpdateAsync(UpdateSessionDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<SessionDto>> GetSessionsByCourseIdAsync(int courseId, int studentId);
+
+        Task<IEnumerable<SessionDto>> GetSessionsByCourseIdAsync(int courseId);
+
+
     }
 }

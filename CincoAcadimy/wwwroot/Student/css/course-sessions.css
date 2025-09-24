@@ -1,0 +1,132 @@
+﻿/* ====== Container ====== */
+.containerr {
+    max-width: 1000px;
+/*    margin: 30px auto;*/
+    padding: 20px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #081933;
+}
+
+    .containerr h1 {
+        margin-bottom: 25px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #f25826;
+    }
+
+/* ====== Session List ====== */
+.sessions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* ====== Session Card ====== */
+.session-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .session-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    }
+
+/* ====== Session Info ====== */
+.session-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.session-desc {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.session-meta {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* ====== Resources ====== */
+.resources {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+    .resources ul {
+        margin: 6px 0 0;
+        padding-left: 18px;
+    }
+
+    .resources li {
+        margin-bottom: 4px;
+    }
+
+.download-link {
+    margin-left: 8px;
+    color: #f25826;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+    .download-link:hover {
+        text-decoration: underline;
+    }
+
+/* ====== Buttons ====== */
+.session-actions {
+    margin-top: 15px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .btn.start {
+        background: #f25826;
+        color: #fff;
+    }
+
+        .btn.start:hover {
+            background: #d4471e;
+        }
+
+    .btn.completed {
+        background: #081933;
+        color: #fff;
+    }
+
+        .btn.completed:hover {
+            background: #0a2440;
+        }
+
+/* ====== States ====== */
+.muted {
+    color: #777;
+    font-size: 14px;
+}
+
+.error {
+    color: red;
+    font-weight: 600;
+}

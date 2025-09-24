@@ -53,5 +53,25 @@ namespace CincoAcadimy.Controllers
             await _service.DeleteAsync(id);
             return Ok(new { message = "Assessment deleted successfully" });
         }
+
+
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Create(UploadDto request)
+        {
+            var result = await _service.uploadAsync(request);
+            return Ok(new { message = "Assessment uploaded successfully" });
+        }
+
+        [HttpGet("session/{sessionId}")]
+        public async Task<IActionResult> GetBySessionId(int sessionId)
+        {
+            var assessments = await _service.GetBySessionIdAsync(sessionId);
+
+            if (assessments == null || !assessments.Any())
+                return NotFound(new { message = "No assessments found for this session." });
+
+            return Ok(assessments);
+        }
     }
 }

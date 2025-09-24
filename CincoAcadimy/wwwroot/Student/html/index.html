@@ -1,0 +1,196 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CincoAcademy — Student Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css?v=8">
+
+</head>
+<body>
+    <div id="header"></div>
+    <main class="container" role="main">
+        <div id="sidebar"></div>
+
+        <section class="main">
+            <!--<p class="small">Ready to continue learning? Here are your quick stats and ongoing courses.</p>-->
+
+            <div class="welcome">
+                <div class="greeting" role="region" aria-label="Welcome message">
+
+                    <div class="stats" aria-hidden="true">
+                        <div class="stat">
+                            <h3>6</h3>
+                            <p>Enrolled Courses</p>
+                        </div>
+                        <div class="stat">
+                            <h3>42</h3>
+                            <p>Completed Lessons</p>
+                        </div>
+                        <div class="stat">
+                            <h3>2</h3>
+                            <p>Pending Assignments</p>
+                        </div>
+                        <div class="stat">
+                            <h3>3.7</h3>
+                            <p>Current GPA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:8px;align-items:center">
+                    <button class="continue" aria-label="Start new course">Explore Courses</button>
+                </div>
+            </div>
+            <div class="grid">
+                <!-- Left column: Ongoing Courses -->
+                <div>
+                    <div class="card" aria-labelledby="ongoing-courses">
+                        <h3 id="ongoing-courses">Ongoing Courses</h3>
+                        <p class="small">Pick up where you left off</p>
+
+                        <div id="ongoing-courses-container" style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+                            <p class="muted">Loading courses...</p>
+                        </div>
+
+                        <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+                            <!-- Course Item -->
+                            <div class="course-card card" role="article" aria-label="Course: Introduction to Data Science">
+                                <div class="course-top">
+                                    <div class="course-info">
+                                        <div class="course-thumb">DS</div>
+                                        <div>
+                                            <div style="font-weight:700">Introduction to Data Science</div>
+                                            <div class="muted">by Dr. Salma Hussein</div>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+                                        <div class="muted">40% complete</div>
+                                        <div style="width:160px" class="progress" aria-hidden="true"><span style="width:40%"></span></div>
+                                    </div>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center">
+                                    <div class="small muted">Next lesson: Visualization Basics</div>
+                                    <button class="continue" onclick="toast('Continuing course')">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Announcements -->
+                    <div class="card" style="margin-top:14px" aria-labelledby="announcements">
+                        <h3 id="announcements">Recent Announcements</h3>
+                        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+                            <div class="announcement" role="article">
+                                <strong>Live Q&A: Data Science</strong>
+                                <div class="small muted">Sep 20, 2025 — Join Dr. Salma for a live Q&A at 6:00 PM.</div>
+                            </div>
+                            <div class="announcement" role="article">
+                                <strong>Course update: Web Dev</strong>
+                                <div class="small muted">Sep 10, 2025 — New exercises added to Module 3.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Deadlines -->
+                <aside>
+                    <div class="card" aria-labelledby="deadlines">
+                        <h3 id="deadlines">Upcoming Deadlines</h3>
+                        <p class="small">Stay on track — deadlines first</p>
+                        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+                            <div class="deadline" role="listitem">
+                                <div class="left">
+                                    <div class="date-pill"><div style="font-size:14px">22 Sep</div><div style="font-size:12px;color:var(--muted)">Fri</div></div>
+                                    <div>
+                                        <div style="font-weight:700">Project: Data Visualization</div>
+                                        <div class="small muted">Course: Introduction to Data Science</div>
+                                    </div>
+                                </div>
+                                <div class="small muted">Due in 3 days</div>
+                            </div>
+
+                            <div class="deadline">
+                                <div class="left">
+                                    <div class="date-pill"><div style="font-size:14px">25 Sep</div><div style="font-size:12px;color:var(--muted)">Mon</div></div>
+                                    <div>
+                                        <div style="font-weight:700">Quiz: HTML & CSS</div>
+                                        <div class="small muted">Course: Web Development Basics</div>
+                                    </div>
+                                </div>
+                                <div class="small muted">Due in 6 days</div>
+                            </div>
+
+                            <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+                                <div class="small muted">View full calendar</div>
+                                <button class="continue" style="background:linear-gradient(90deg,var(--white),var(--muted));color:var(--primary-navy);box-shadow:none;border:1px solid #eef2f6">Open Calendar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick messages card -->
+                    <div class="card" style="margin-top:14px">
+                        <h4>Messages</h4>
+                        <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+                            <div style="display:flex;align-items:center;gap:10px">
+                                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ffd9c7,#f25826);display:flex;align-items:center;justify-content:center;color:white;font-weight:700">SH</div>
+                                <div>
+                                    <div style="font-weight:700">Dr. Salma</div>
+                                    <div class="small muted">Reminder: check the assignment rubric.</div>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px">
+                                <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#d0f2f1,#009688);display:flex;align-items:center;justify-content:center;color:white;font-weight:700">OS</div>
+                                <div>
+                                    <div style="font-weight:700">Omar Said</div>
+                                    <div class="small muted">New announcement: project submission extended.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </aside>
+            </div>
+
+            <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:center">
+                <div class="small muted">Made with ❤️ at CincoAcademy</div>
+                <div class="small muted">Need customized version? I can convert this to React or Webflow for you.</div>
+            </div>
+
+        </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite" style="position:fixed;right:18px;bottom:18px;display:none;background:linear-gradient(90deg,var(--primary-navy),var(--teal));color:white;padding:10px 12px;border-radius:10px;box-shadow:0 8px 30px rgba(10,46,93,0.2)"></div>
+
+    <script>
+        // Simple toast for interaction feedback
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            t.style.opacity = '1';
+            setTimeout(() => { t.style.opacity = '0'; t.style.display = 'none' }, 1800);
+        }
+
+        // Keyboard accessibility: focus first nav link with Alt+D
+        window.addEventListener('keydown', (e) => {
+            if (e.altKey && e.key.toLowerCase() === 'd') {
+                document.querySelector('.nav-links a')?.focus();
+            }
+        });
+    </script>
+    <script src="/Student/js/script.js?v=8"></script>
+    <script>
+        async function loadComponent(id, file) {
+            const response = await fetch(file);
+            const html = await response.text();
+            document.getElementById(id).innerHTML = html;
+        }
+        loadComponent("header", "header.html");
+        loadComponent("sidebar", "sidebar.html");
+    </script>
+</body>
+</html>

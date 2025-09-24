@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Courses</title>
+    <link rel="stylesheet" href="/Admin/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Course Management (Admin)</h1>
+
+        <section class="add-course">
+            <h2>Add New Course</h2>
+            <form id="addCourseForm">
+                <input type="text" id="title" placeholder="Course Title" required>
+                <input type="text" id="description" placeholder="Course Description" required>
+                <input type="text" id="instructorName" placeholder="Instructor Name" required>
+                <button type="submit">Add Course</button>
+            </form>
+        </section>
+
+        <section class="course-list">
+            <h2>All Courses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Instructor</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTableBody">
+                    <!-- Courses will be populated here -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="/Admin/script.js"></script>
+</body>
+</html>

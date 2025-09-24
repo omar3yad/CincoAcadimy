@@ -10,5 +10,10 @@ namespace CincoAcadimy.Service
         Task AddCourseAsync(CreateCourseDto dto);
         Task UpdateCourseAsync(Course course);
         Task DeleteCourseAsync(int id);
+
+        Task<IEnumerable<OngoingCourseDto>> GetOngoingCoursesAsync(int studentId);
+        int CalculateProgress(Course course, int studentId);
+
+
     }
 }

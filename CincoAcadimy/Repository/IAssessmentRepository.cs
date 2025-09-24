@@ -9,5 +9,12 @@ namespace CincoAcadimy.Repository
         Task AddAsync(Assessment assessment);
         Task UpdateAsync(Assessment assessment);
         Task DeleteAsync(int id);
+
+        Task<StudentAssessment> uploadAsync(StudentAssessment entity);
+
+        Task<List<Assessment>> GetBySessionIdAsync(int sessionId);
+
+
+
     }
-   }
+}

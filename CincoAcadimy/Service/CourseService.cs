@@ -64,5 +64,44 @@ namespace CincoAcadimy.Service
         {
             await _repository.DeleteAsync(id);
         }
+        public async Task<IEnumerable<OngoingCourseDto>> GetOngoingCoursesAsync(int studentId)
+        {
+            var courses = await _repository.GetOngoingCoursesAsync(studentId);
+
+            var result = courses.Select(c =>
+            {
+                var sessions = c.Sessions.OrderBy(s => s.Id).ToList();
+
+                var nextLesson = sessions.FirstOrDefault(s =>
+                    !s.StudentSessions.Any(ss => ss.StudentId == studentId && ss.IsCompleted)
+                );
+
+                return new OngoingCourseDto
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    InstructorName = c.Instructor != null ? c.Instructor.User.UserName : "Unknown",
+                    Progress = CalculateProgress(c, studentId),
+                    NextLesson = nextLesson != null ? new SessionDto
+                    {
+                        Id = nextLesson.Id,
+                        Name = nextLesson.Name,
+                        IsCompleted = nextLesson.StudentSessions
+                                      .FirstOrDefault(ss => ss.StudentId == studentId)?.IsCompleted ?? false
+                    } : null
+                };
+            });
+
+            return result;
+        }
+
+        public int CalculateProgress(Course course, int studentId)
+        {
+            var sessions = course.Sessions.ToList();
+            if (!sessions.Any()) return 0;
+
+            var completed = sessions.Count(s => s.StudentSessions.FirstOrDefault()?.IsCompleted == true);
+            return (int)((double)completed / sessions.Count * 100);
+        }
     }
 }

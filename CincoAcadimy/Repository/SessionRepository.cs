@@ -1,5 +1,4 @@
 ﻿using CincoAcadimy.Models;
-using CincoAcadimy.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CincoAcadimy.Repository
@@ -15,13 +14,17 @@ namespace CincoAcadimy.Repository
 
         public async Task<IEnumerable<Session>> GetAllAsync()
         {
-            return await _context.Sessions.Include(s => s.Course).ToListAsync();
+            return await _context.Sessions
+                .Include(s => s.Resources)
+                .Include(s => s.Course).ToListAsync();
         }
 
         public async Task<Session> GetByIdAsync(int id)
         {
-            return await _context.Sessions.Include(s => s.Course)
-                                          .FirstOrDefaultAsync(s => s.Id == id);
+            return await _context.Sessions
+                .Include(s => s.Course)
+                .Include(s => s.Resources)
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<Session> AddAsync(Session session)
@@ -47,5 +50,24 @@ namespace CincoAcadimy.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<Session>> GetSessionsByCourseIdAsync(int courseId, int studentId)
+        {
+            return await _context.Sessions
+                .Where(s => s.CourseId == courseId)
+                                .Include(s => s.Resources)
+                .Include(s => s.StudentSessions) // هنستخدمها عشان نعرف الطالب خلص ولا لأ
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Session>> GetSessionsByCourseIdAsync(int courseId)
+        {
+            return await _context.Sessions
+                .Where(s => s.CourseId == courseId)
+                .Include(s => s.Resources)
+                 .Include(s => s.StudentSessions) // هنستخدمها عشان نعرف الطالب خلص ولا لأ
+                .ToListAsync();
+        }
+
     }
 }

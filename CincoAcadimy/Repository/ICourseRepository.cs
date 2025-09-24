@@ -9,5 +9,7 @@ namespace CincoAcadimy.Repository
         Task AddAsync(Course course);
         Task UpdateAsync(Course course);
         Task DeleteAsync(int id);
+        Task<IEnumerable<Course>> GetOngoingCoursesAsync(int studentId);
+
     }
 }

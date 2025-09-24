@@ -1,6 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 using CincoAcadimy.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var courses = await _service.GetAllCoursesAsync();
@@ -59,6 +61,13 @@ namespace CincoAcadimy.Controllers
         {
             await _service.DeleteCourseAsync(id);
             return NoContent();
+        }
+
+        [HttpGet("ongoing/{studentId}")]
+        public async Task<IActionResult> GetOngoingCourses(int studentId)
+        {
+            IEnumerable<OngoingCourseDto> courses = await _service.GetOngoingCoursesAsync(studentId);
+            return Ok(courses);
         }
     }
 }

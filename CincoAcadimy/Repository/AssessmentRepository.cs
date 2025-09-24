@@ -49,5 +49,19 @@ namespace CincoAcadimy.Repository
                     await _context.SaveChangesAsync();
                 }
             }
+
+        public async Task<StudentAssessment> uploadAsync(StudentAssessment entity)
+        {
+            _context.StudentAssessments.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<List<Assessment>> GetBySessionIdAsync(int sessionId)
+        {
+            return await _context.Assessments
+                .Where(a => a.SessionId == sessionId)
+                .ToListAsync();
         }
     }
+}

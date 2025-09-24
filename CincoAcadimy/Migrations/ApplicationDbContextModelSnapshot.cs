@@ -131,6 +131,9 @@ namespace CincoAcadimy.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SessionId")
                         .HasColumnType("int");
 
@@ -248,6 +251,50 @@ namespace CincoAcadimy.Migrations
                     b.ToTable("Instructors");
                 });
 
+            modelBuilder.Entity("CincoAcadimy.Models.Resource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDownloadable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("CincoAcadimy.Models.Session", b =>
                 {
                     b.Property<int>("Id")
@@ -259,7 +306,22 @@ namespace CincoAcadimy.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VideoUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -307,6 +369,9 @@ namespace CincoAcadimy.Migrations
                     b.Property<double>("Grade")
                         .HasColumnType("float");
 
+                    b.Property<string>("SubmissionLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
 
@@ -314,7 +379,7 @@ namespace CincoAcadimy.Migrations
 
                     b.HasIndex("AssessmentId");
 
-                    b.ToTable("StudentAssessment");
+                    b.ToTable("StudentAssessments");
                 });
 
             modelBuilder.Entity("CincoAcadimy.Models.StudentCourse", b =>
@@ -333,6 +398,32 @@ namespace CincoAcadimy.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("StudentCourses");
+                });
+
+            modelBuilder.Entity("CincoAcadimy.Models.StudentSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentSessions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -542,6 +633,17 @@ namespace CincoAcadimy.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CincoAcadimy.Models.Resource", b =>
+                {
+                    b.HasOne("CincoAcadimy.Models.Session", "Session")
+                        .WithMany("Resources")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Session");
+                });
+
             modelBuilder.Entity("CincoAcadimy.Models.Session", b =>
                 {
                     b.HasOne("CincoAcadimy.Models.Course", "Course")
@@ -598,6 +700,25 @@ namespace CincoAcadimy.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("CincoAcadimy.Models.StudentSession", b =>
+                {
+                    b.HasOne("CincoAcadimy.Models.Session", "Session")
+                        .WithMany("StudentSessions")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CincoAcadimy.Models.Student", "Student")
+                        .WithMany("StudentSessions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Session");
 
                     b.Navigation("Student");
                 });
@@ -686,6 +807,10 @@ namespace CincoAcadimy.Migrations
                     b.Navigation("Assessments");
 
                     b.Navigation("Attendances");
+
+                    b.Navigation("Resources");
+
+                    b.Navigation("StudentSessions");
                 });
 
             modelBuilder.Entity("CincoAcadimy.Models.Student", b =>
@@ -695,6 +820,8 @@ namespace CincoAcadimy.Migrations
                     b.Navigation("StudentAssessments");
 
                     b.Navigation("StudentCourses");
+
+                    b.Navigation("StudentSessions");
                 });
 #pragma warning restore 612, 618
         }

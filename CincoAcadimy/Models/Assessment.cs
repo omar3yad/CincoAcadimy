@@ -10,6 +10,8 @@ namespace CincoAcadimy.Models
         public string Title { get; set; }   // مثال: Quiz 1, Assignment 2
         public string? Description { get; set; }
 
+        public string? FilePath { get; set; }
+
         public DateTime DueDate { get; set; }
 
         // كل Assessment تبع سيشن

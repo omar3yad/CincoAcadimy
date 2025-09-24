@@ -9,5 +9,6 @@ namespace CincoAcadimy.Repositories
         Task<IList<string>> GetUserRolesAsync(ApplicationUser user);
         Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);
         Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role);
+        Task<ApplicationUser> GetUserWithStudentAsync(string userName);
     }
 }

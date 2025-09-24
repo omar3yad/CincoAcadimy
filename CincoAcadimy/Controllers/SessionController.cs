@@ -56,5 +56,22 @@ namespace CincoAcadimy.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("course/{courseId}/student/{studentId}")]
+        public async Task<IActionResult> GetSessionsByCourseId(int courseId, int studentId)
+        {
+            var sessions = await _service.GetSessionsByCourseIdAsync(courseId, studentId);
+            return Ok(sessions);
+        }
+        [HttpGet("course/{courseId}")]
+        public async Task<IActionResult> GetSessionsByCourse(int courseId)
+        {
+            var sessions = await _service.GetSessionsByCourseIdAsync(courseId);
+
+            if (sessions == null || !sessions.Any())
+                return NotFound(new { Message = "No sessions found for this course" });
+
+            return Ok(sessions);
+        }
     }
 }

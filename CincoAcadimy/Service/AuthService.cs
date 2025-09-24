@@ -2,6 +2,7 @@
 using CincoAcadimy.Models;
 using CincoAcadimy.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,11 +15,14 @@ namespace CincoAcadimy.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _config;
         private readonly IUserRoleRepository _userRoleRepository;
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, IUserRoleRepository userRoleRepository)
+        private readonly ApplicationDbContext _context;
+
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, IUserRoleRepository userRoleRepository, ApplicationDbContext context)
         {
             _userManager = userManager;
             _config = config;
             _userRoleRepository = userRoleRepository;
+            _context = context;
         }
 
         public async Task<string> RegisterAsync(RegisterDto model)
@@ -53,6 +57,10 @@ namespace CincoAcadimy.Service
         public async Task<AuthResponseDTO> LoginAsync(LoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
+            // Load student
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.UserId == user.Id);
+
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 throw new UnauthorizedAccessException("Invalid username or password");
 
@@ -82,8 +90,12 @@ namespace CincoAcadimy.Service
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
-                Role = roles.FirstOrDefault()
+                Role = roles.FirstOrDefault(),
+                StudentId = student.Id,  // ✅ كده تمام
+                StudentName = user.UserName
             };
+
+
         }
 
         public async Task<IEnumerable<UserDto>> GetUsersByRoleAsync(string role)

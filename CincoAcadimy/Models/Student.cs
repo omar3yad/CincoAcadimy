@@ -11,6 +11,8 @@ namespace CincoAcadimy.Models
         public ApplicationUser User { get; set; }
         public DateTime EnrollmentDate { get; set; }
         public string? Major { get; set; }
+        public ICollection<StudentSession> StudentSessions { get; set; }
+
         public ICollection<StudentCourse> StudentCourses { get; set; }
         public ICollection<Attendance> Attendances { get; set; }
         public ICollection<StudentAssessment> StudentAssessments { get; set; } // <-- Add this property

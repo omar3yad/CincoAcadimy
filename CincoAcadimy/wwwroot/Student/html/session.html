@@ -1,0 +1,94 @@
+﻿<!doctype html>
+<html lang="ar">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CincoAcademy — Sessions</title>
+    <link rel="stylesheet" href="/Student/css/session.css" />
+
+    <meta name="description" content="CincoAcademy course sessions — view and manage sessions and assignments" />
+
+</head>
+<body>
+        <div id="header"></div>
+    <div class="wrap" role="application" aria-label="CincoAcademy Sessions Page">
+        <!--<header class="appbar" role="banner">
+        <div class="brand">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+                <defs>
+                    <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#f25826" /><stop offset="1" stop-color="#081933" /></linearGradient>
+                </defs>
+                <rect width="64" height="64" rx="12" fill="url(#g2)" />
+                <g transform="translate(9,12)" fill="#fff"><circle cx="6" cy="10" r="5" /><rect x="18" y="6" rx="2" ry="2" width="22" height="8" /></g>
+            </svg>
+            <div>
+                <div class="title">Cinco<span style="color:var(--logo-orange)">Academy</span></div>
+                <div class="muted" style="font-size:13px">Course Sessions</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="muted" id="courseSummary">Course • 8 sessions • <span id="completedCount">0</span> completed</div>
+            <button class="btn ghost" id="backBtn">← Back to Course</button>
+        </div>
+    </header>-->
+            <!--<div id="sidebar"></div>-->
+
+            <!-- left column -->
+            <aside class="panel" aria-label="Session list">
+                <div class="list-head">
+                    <h3>All Sessions</h3>
+                    <div class="stats"><span id="remainingLabel">0 remaining</span></div>
+                </div>
+
+                <div class="search" style="margin-bottom:10px">
+                    <input id="filterInput" placeholder="Search sessions..." aria-label="Search sessions" />
+                </div>
+
+                <div class="sessions-list" id="sessionsList" role="list" aria-label="List of sessions">
+                    <!-- JS will render session items -->
+                </div>
+            </aside>
+
+            <!-- right column -->
+            <section class="detail" aria-live="polite">
+
+                <div class="session-panel" id="sessionPanel">
+                    <div class="session-header">
+                        <h2 id="contentTitle">Session details</h2>
+                        <p id="contentDesc">Click on a session to load details.</p>
+                    </div>
+
+                    <div id="videoWrap" style="display:none">
+                        <iframe id="videoFrame" width="100%" height="420" title="Session video" allowfullscreen></iframe>
+                    </div>
+
+                    <div id="resources" class="resources"></div>
+
+                    <div id="status" class="status"></div>
+
+                    <div class="assessment" id="assessmentSection" style="display:none">
+                        <h3>Assessment</h3>
+                        <p class="muted">Test your understanding of this session.</p>
+
+                        <div class="assessment-card" id="assessmentCard">
+                            <!-- dynamic content here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </div>
+
+    <script src="/Student/js/se.js"></script>
+    <script>
+        async function loadComponent(id, file) {
+            const response = await fetch(file);
+            const html = await response.text();
+            document.getElementById(id).innerHTML = html;
+        }
+        loadComponent("header", "header.html");
+        loadComponent("sidebar", "sidebar.html");
+    </script>
+
+</body>
+</html>

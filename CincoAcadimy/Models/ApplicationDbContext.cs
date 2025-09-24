@@ -20,7 +20,9 @@ namespace CincoAcadimy.Models
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
-
+        public DbSet<StudentSession> StudentSessions { get; set; }
+        public DbSet<StudentAssessment> StudentAssessments { get; set; }
+        public DbSet<Resource> Resources { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -154,6 +156,24 @@ namespace CincoAcadimy.Models
             // =====================
             builder.Entity<StudentAssessment>()
                 .HasKey(sa => new { sa.StudentId, sa.AssessmentId });
+            // تكوين العلاقة Many-to-Many بين Student و Session
+            builder.Entity<StudentSession>()
+                .HasKey(ss => ss.Id); // لو عايز Id كـ PK
+                                      // لو تحب تستخدم composite key بدل Id:
+                                      // .HasKey(ss => new { ss.StudentId, ss.SessionId });
+
+            builder.Entity<StudentSession>()
+                .HasOne(ss => ss.Student)
+                .WithMany(s => s.StudentSessions)
+                .HasForeignKey(ss => ss.StudentId);
+
+
+            builder.Entity<Resource>()
+       .HasOne(r => r.Session)
+       .WithMany(s => s.Resources)
+       .HasForeignKey(r => r.SessionId)
+       .OnDelete(DeleteBehavior.Cascade);
         }
+    
     }
 }

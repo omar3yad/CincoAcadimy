@@ -46,5 +46,20 @@ namespace CincoAcadimy.Repository
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Course>> GetOngoingCoursesAsync(int studentId)
+        {
+            return await _context.StudentCourses
+                .Where(sc => sc.StudentId == studentId)
+                .Include(sc => sc.Course)
+                    .ThenInclude(c => c.Sessions)
+                        .ThenInclude(s => s.StudentSessions) // هنا ضم كل الـ StudentSessions
+                .Include(sc => sc.Course)
+                    .ThenInclude(c => c.Instructor)
+                        .ThenInclude(i => i.User)
+                .Select(sc => sc.Course)
+                .ToListAsync();
+
+
+        }
     }
 }

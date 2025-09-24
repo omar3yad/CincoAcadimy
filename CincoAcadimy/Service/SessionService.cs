@@ -16,11 +16,21 @@ namespace CincoAcadimy.Service
         public async Task<IEnumerable<SessionDto>> GetAllAsync()
         {
             var sessions = await _repository.GetAllAsync();
+
             return sessions.Select(s => new SessionDto
             {
                 Id = s.Id,
-                Title = s.Name,
-                CourseId = s.CourseId
+                Name = s.Name,
+                Description = s.Description,
+                VideoUrl = s.VideoUrl,
+                Resources = s.Resources.Select(r => new ResourceDto
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Url = r.Url,
+                    FileType = r.FileType,
+                    IsDownloadable = r.IsDownloadable
+                }).ToList()?? new List<ResourceDto>()
             });
         }
 
@@ -32,8 +42,17 @@ namespace CincoAcadimy.Service
             return new SessionDto
             {
                 Id = s.Id,
-                Title = s.Name,
-                CourseId = s.CourseId
+                Name = s.Name,
+                Description = s.Description,
+                VideoUrl = s.VideoUrl,
+                Resources = s.Resources.Select(r => new ResourceDto
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Url = r.Url,
+                    FileType = r.FileType,
+                    IsDownloadable = r.IsDownloadable
+                }).ToList()
             };
         }
 
@@ -50,8 +69,8 @@ namespace CincoAcadimy.Service
             return new SessionDto
             {
                 Id = result.Id,
-                Title = result.Name,
-                CourseId = result.CourseId
+                Name = result.Name,
+                //CourseId = result.CourseId
             };
         }
 
@@ -65,10 +84,10 @@ namespace CincoAcadimy.Service
             var result = await _repository.UpdateAsync(existing);
 
             return new SessionDto
-            {
+            {   
                 Id = result.Id,
-                Title = result.Name,
-                CourseId = result.CourseId
+                Name = result.Name,
+                //CourseId = result.CourseId
             };
         }
 
@@ -76,5 +95,41 @@ namespace CincoAcadimy.Service
         {
             return await _repository.DeleteAsync(id);
         }
+        public async Task<IEnumerable<SessionDto>> GetSessionsByCourseIdAsync(int courseId, int studentId)
+        {
+            var sessions = await _repository.GetSessionsByCourseIdAsync(courseId, studentId);
+
+            return sessions.Select(s => new SessionDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Description = s.Description,
+                VideoUrl = s.VideoUrl,
+                IsCompleted = s.StudentSessions
+                              .FirstOrDefault(ss => ss.StudentId == studentId)?.IsCompleted ?? false,
+
+                Resources = s.Resources.Select(r => new ResourceDto
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Url = r.Url,
+                    FileType = r.FileType,
+                    IsDownloadable = r.IsDownloadable
+                }).ToList()?? new List<ResourceDto>()
+            });
+        }
+
+        public async Task<IEnumerable<SessionDto>> GetSessionsByCourseIdAsync(int courseId)
+        {
+            var sessions = await _repository.GetSessionsByCourseIdAsync(courseId);
+
+            return sessions.Select(s => new SessionDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+            });
+        }
+
+
     }
 }

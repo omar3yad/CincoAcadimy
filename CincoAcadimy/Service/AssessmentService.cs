@@ -22,13 +22,27 @@ namespace CincoAcadimy.Service
                 Id = a.Id,
                 Title = a.Title,
                 Description = a.Description,
+                FilePath = a.FilePath,
                 SessionId = a.SessionId
             }).ToList();
         }
 
-        public async Task<Assessment?> GetByIdAsync(int id)
+        public async Task<AssessmentDto?> GetByIdAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            var a = await _repository.GetByIdAsync(id);
+
+            if (a == null) return null;
+
+            var dto = new AssessmentDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                FilePath = a.FilePath,
+                SessionId = a.SessionId
+            };
+
+            return dto;
         }
 
         public async Task AddAsync(AddAssessmentDto dto)
@@ -37,6 +51,7 @@ namespace CincoAcadimy.Service
             {
                 Title = dto.Title,
                 Description = dto.Description,
+                FilePath = dto.FileType,
                 SessionId = dto.SessionId
             };
 
@@ -60,5 +75,33 @@ namespace CincoAcadimy.Service
         {
             await _repository.DeleteAsync(id);
         }
+        public async Task<StudentAssessment> uploadAsync(UploadDto request)
+        {
+            var entity = new StudentAssessment
+            {
+                StudentId =request.StudentId,
+                AssessmentId = request.AssessmentId,
+                SubmittedAt = DateTime.UtcNow,
+                Grade = -1, // أو null لو هتخليها Nullable
+                SubmissionLink = request.SubmissionLink,
+            };
+
+            return await _repository.uploadAsync(entity);
+        }
+
+        public async Task<List<AssessmentDto>> GetBySessionIdAsync(int sessionId)
+        {
+            var assessments = await _repository.GetBySessionIdAsync(sessionId);
+
+            return assessments.Select(a => new AssessmentDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                FilePath = a.FilePath,
+                SessionId = a.SessionId
+            }).ToList();
+        }
+
     }
 }
