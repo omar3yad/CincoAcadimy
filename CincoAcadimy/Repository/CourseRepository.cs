@@ -61,8 +61,6 @@ namespace CincoAcadimy.Repository.@interface
                         .ThenInclude(i => i.User)
                 .Select(sc => sc.Course)
                 .ToListAsync();
-
-
         }
 
         public async Task<IEnumerable<StudentDto>> GetStudentsByCourseIdAsync(int courseId)
