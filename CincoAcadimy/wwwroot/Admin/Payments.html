@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - LMS Admin Dashboard</title>
+    <link rel="stylesheet" href="/Admin/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="sidebar-container" class="sidebar"></div>
+
+        <script>
+            // Load sidebar dynamically
+            fetch('/Admin/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading sidebar:', error));
+        </script>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Payments</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Admin User">
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Administrator</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payments Content -->
+            <div id="payments" class="content-section active">
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="chart-title">Payment History</div>
+                        <div>
+                            <input type="text" placeholder="Search payments..." style="width: 200px; margin-right: 10px;">
+                            <button class="btn btn-primary">Export</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Student Name</th>
+                                <th>Course</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-payments-table">
+                            <!-- All payment data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function loadPayments() {
+            try {
+                const response = await fetch("https://localhost:44380/api/Payments");
+                if (!response.ok) throw new Error("Failed to fetch payments");
+
+                const payments = await response.json();
+                const tableBody = document.getElementById("all-payments-table");
+                tableBody.innerHTML = "";
+
+                payments.forEach(payment => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                            <td>${payment.id}</td>
+                            <td>${payment.studentId ?? "Unknown"}</td>
+                            <td>${payment.courseId ?? payment.courseId}</td>
+                            <td>${payment.coursePrice ?? 0} EGP</td>
+                            <td>${new Date(payment.createdAt).toLocaleDateString()}</td>
+                            <td>
+                                <span class="status-badge ${payment.status}">
+                                    ${payment.status}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-success" onclick="updateStatus(${payment.id}, 'Approved')">Approve</button>
+                                <button class="btn btn-sm btn-danger" onclick="updateStatus(${payment.id}, 'Rejected')">Reject</button>
+                                <a href="${payment.screenshotPath}" target="_blank" class="btn btn-sm btn-secondary">View</a>
+                            </td>
+                        `;
+                    tableBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error(err);
+                alert("Error loading payments ❌");
+            }
+        }
+
+        // تحديث حالة الدفع
+        async function updateStatus(paymentId, newStatus) {
+            try {
+                const response = await fetch("https://localhost:44380/api/Payments/status", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: paymentId, status: newStatus })
+                });
+
+                if (response.ok) {
+                    alert(`Payment #${paymentId} updated to ${newStatus} ✅`);
+                    loadPayments(); // إعادة تحميل البيانات
+                } else {
+                    alert("Failed to update status ❌");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error updating status ❌");
+            }
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        document.addEventListener("DOMContentLoaded", loadPayments);
+    </script>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

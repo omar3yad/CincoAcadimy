@@ -1,0 +1,513 @@
+﻿
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دفع الرسوم - Cinco Academy</title>
+    <link rel="stylesheet" href="student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* تخصيصات إضافية لصفحة الدفع */
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .payment-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--medium-gray);
+            padding-bottom: 1rem;
+        }
+
+            .payment-header h1 {
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+            }
+
+        .payment-instructions {
+            background: rgba(242, 88, 38, 0.1);
+            border-right: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+        }
+
+            .payment-instructions h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+        .instapay-number {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 0.75rem;
+            background: var(--light-gray);
+            border: 1px dashed var(--medium-gray);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .file-input-label:hover {
+                background: rgba(242, 88, 38, 0.1);
+                border-color: var(--primary-color);
+            }
+
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+            .submit-btn:hover {
+                background: #e04e1b;
+            }
+
+            .submit-btn:disabled {
+                background: var(--medium-gray);
+                cursor: not-allowed;
+            }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .course-info {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+            .course-info h3 {
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+            }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        /* تخصيصات للعربية */
+        body[dir="rtl"] {
+            text-align: right;
+        }
+
+        .example-text {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <!-- Top Navigation Bar -->
+    <nav class="navbar" dir="ltr">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <h1><i class="fas fa-graduation-cap"></i> Cinco Academy</h1>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="profile">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Student Profile">
+                        <span id="student-name">Student Name</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container" dir="ltr">
+        <!-- Sidebar -->
+        <aside class="sidebar" dir="ltr">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="student.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-book"></i>
+                        <span>My Courses</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="payments.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" dir="rtl">
+            <div class="payment-container">
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <h1><i class="fas fa-credit-card"></i> دفع رسوم الاشتراك</h1>
+                        <p>أكمل عملية الدفع للتسجيل في الكورس</p>
+                    </div>
+
+                    <!-- Course Information -->
+                    <div class="course-info" id="course-info">
+                        <h3>جاري تحميل معلومات الكورس...</h3>
+                    </div>
+
+                    <!-- Payment Instructions -->
+                    <div class="payment-instructions">
+                        <h3><i class="fas fa-info-circle"></i> تعليمات الدفع</h3>
+                        <p>برجاء التحويل عبر Instapay على الرقم التالي:</p>
+                        <div class="instapay-number">
+                            <i class="fas fa-mobile-alt"></i> 01067977217
+                        </div>
+                        <p style="margin-top: 1rem;">بعد التحويل قم بإدخال رقم الهاتف المرسل منه ورفع صورة (Screenshot) لعملية التحويل.</p>
+                    </div>
+
+                    <!-- Payment Form -->
+                    <form id="paymentForm">
+                        <input type="hidden" id="courseId" name="courseId">
+
+                        <div class="form-group">
+                            <label for="phoneNumber" class="form-label">
+                                رقم الهاتف المحول منه *
+                            </label>
+                            <input type="tel"
+                                   id="phoneNumber"
+                                   name="phoneNumber"
+                                   class="form-input"
+                                   placeholder="مثال: 0123456789"
+                                   required
+                                   pattern="01[0-9]{9}"dir="rtl"> 
+                            <div class="example-text">يجب أن يبدأ الرقم بـ 01 ويحتوي على 11 رقماً</div>
+                            <div class="error-message" id="phoneError">رقم الهاتف غير صحيح</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Screenshot التحويل *
+                            </label>
+                            <div class="file-input-wrapper">
+                                <input type="file"
+                                       id="screenshot"
+                                       name="screenshot"
+                                       class="file-input"
+                                       accept="image/*"
+                                       required>
+                                <label for="screenshot" class="file-input-label">
+                                    <i class="fas fa-cloud-upload-alt"></i> اختر ملف الصورة
+                                </label>
+                                <div class="file-name" id="fileName">لم يتم اختيار ملف</div>
+                            </div>
+                            <div class="error-message" id="fileError">يجب رفع صورة التحويل</div>
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> إرسال الطلب
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="payment-card">
+                    <h3><i class="fas fa-question-circle"></i> معلومات مهمة</h3>
+                    <ul style="color: var(--dark-gray); line-height: 1.8; padding-right: 1rem;">
+                        <li>سيتم تفعيل الكورس خلال 24 ساعة بعد التحقق من الدفع</li>
+                        <li>للاستفسارات يمكنك التواصل على الرقم 01067977217</li>
+                        <li>احتفظ بصورة التحويل لحين تفعيل الكورس</li>
+                        <li>في حالة وجود أي مشكلة في الدفع، سيتم التواصل معك على الرقم المدخل</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // التحقق من تسجيل الدخول
+        const token = localStorage.getItem("token");
+        const studentId = localStorage.getItem("studentId");
+
+        if (!token || !studentId) {
+            window.location.href = "login.html";
+        }
+
+        // Get courseId from query string
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const courseId = getQueryParam("courseId");
+        if (!courseId) {
+            alert("يجب تحديد رقم الكورس (CourseId) في الرابط.");
+            window.location.href = "courses.html";
+        } else {
+            document.getElementById("courseId").value = courseId;
+            loadCourseInfo(courseId);
+        }
+
+        // دالة تجيب بيانات الكورس
+        async function getCourse(courseId) {
+            const response = await fetch(`https://localhost:44380/api/Course/${courseId}`);
+            if (!response.ok) {
+                throw new Error("تعذر تحميل بيانات الكورس");
+            }
+            return await response.json();
+        }
+
+        // تحميل معلومات الكورس
+        async function loadCourseInfo(courseId) {
+            try {
+                const course = await getCourse(courseId);
+                const courseInfoDiv = document.getElementById('course-info');
+
+                            //<p><strong>المدرب:</strong> ${course.title || 'غير محدد'}</p>
+                courseInfoDiv.innerHTML = `
+                            <h3>${course.title}</h3>
+                            <p><strong>السعر:</strong> ${course.price ? `EGP ${course.price}` : 'غير محدد'}</p>
+                            <p><strong>الوصف:</strong> ${course.description || 'لا يوجد وصف'}</p>
+                        `;
+            } catch (error) {
+                console.error('Error loading course info:', error);
+                document.getElementById('course-info').innerHTML = `
+                            <h3>الكورس #${courseId}</h3>
+                            <p>تعذر تحميل معلومات الكورس التفصيلية</p>
+                        `;
+            }
+        }
+
+        // التحقق من صحة رقم الهاتف
+        function validatePhone(phone) {
+            const phoneRegex = /^01[0-9]{9}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // عرض اسم الملف المختار
+        document.getElementById('screenshot').addEventListener('change', function (e) {
+            const fileName = this.files[0] ? this.files[0].name : 'لم يتم اختيار ملف';
+            document.getElementById('fileName').textContent = fileName;
+
+            // التحقق من حجم الملف (5MB كحد أقصى)
+            if (this.files[0] && this.files[0].size > 5 * 1024 * 1024) {
+                document.getElementById('fileError').textContent = 'حجم الملف يجب أن يكون أقل من 5MB';
+                document.getElementById('fileError').style.display = 'block';
+                this.value = '';
+                document.getElementById('fileName').textContent = 'لم يتم اختيار ملف';
+            } else {
+                document.getElementById('fileError').style.display = 'none';
+            }
+        });
+
+        // التحقق من صحة رقم الهاتف أثناء الكتابة
+        document.getElementById('phoneNumber').addEventListener('input', function (e) {
+            if (this.value && !validatePhone(this.value)) {
+                document.getElementById('phoneError').style.display = 'block';
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+        });
+
+        // معالجة الفورم
+        document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+
+            // التحقق من البيانات
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const screenshot = document.getElementById('screenshot').files[0];
+
+            let isValid = true;
+
+            if (!validatePhone(phoneNumber)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!screenshot) {
+                document.getElementById('fileError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            try {
+                // تعطيل الزر وعرض حالة التحميل
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> جاري الإرسال...';
+
+                // هات بيانات الكورس
+                const course = await getCourse(courseId);
+
+                const formData = new FormData(e.target);
+
+                // أضف StudentId و CourseId و CoursePrice للـ FormData
+                // أضف StudentId و CourseId و CoursePrice و Phone للـ FormData
+                formData.append("StudentId", studentId);
+                formData.append("CourseId", courseId);
+                formData.append("CoursePrice", course.price || 0);
+                formData.append("Phone", phoneNumber); // ✅ الحقل اللي السيرفر محتاجه
+
+
+                // Debug log
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ": " + pair[1]);
+                }
+
+                const response = await fetch("https://localhost:44380/api/Payments", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert("تم إرسال بيانات الدفع بنجاح! سيتم تفعيل الكورس بعد المراجعة ✅");
+                    window.location.href = "payments.html";
+                } else {
+                    const errorText = await response.text();
+                    console.error("Server error:", errorText);
+                    alert("حصل خطأ أثناء الإرسال ❌\n" + errorText);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("خطأ في الاتصال بالسيرفر ❌");
+            } finally {
+                // إعادة تفعيل الزر
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+
+        // إضافة تأثيرات للواجهة
+        document.addEventListener('DOMContentLoaded', function () {
+            // إضافة تأثيرات للعناصر
+            const formInputs = document.querySelectorAll('.form-input');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.parentElement.classList.add('focused');
+                });
+
+                input.addEventListener('blur', function () {
+                    this.parentElement.classList.remove('focused');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

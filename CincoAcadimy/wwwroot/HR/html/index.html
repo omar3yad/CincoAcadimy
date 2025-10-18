@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Dashboard - CincoAcademy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Sidebar Navigation">
+            <div class="sidebar-header">
+                <img src="../img/hr-logo.png" alt="HR Logo" class="logo" />
+                <span class="sidebar-title">CincoAcademy HR</span>
+                <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
+                    <li><a href="assessment.html"><i class="fas fa-file-alt"></i> <span>Assignments</span></a></li>
+                    <li><a href="#"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> <span>Students</span></a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header / Top Bar -->
+            <header class="top-bar">
+                <div class="top-left">
+                    <img src="../img/hr-logo.png" alt="HR Logo" class="logo-small" />
+                </div>
+                <div class="top-right">
+                    <button class="notification-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot" id="notifDot"></span>
+                    </button>
+                    <div class="profile-menu">
+                        <img src="../img/profile.png" alt="Profile" class="profile-icon" />
+                        <span class="profile-name">HR Admin</span>
+                        <button class="profile-dropdown-btn" aria-label="Profile Menu">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="profile-dropdown" id="profileDropdown" aria-label="Profile Dropdown" hidden>
+                            <a href="#">Settings</a>
+                            <a href="#">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Welcome Message -->
+            <section class="welcome-section">
+                <h1>Welcome back, HR Admin <span aria-label="Waving Hand">👋</span></h1>
+            </section>
+            <!-- Dashboard Cards -->
+            <section class="dashboard-cards">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-users"></i></div>
+                    <div class="card-info">
+                        <h2 id="studentsCount">120</h2>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="card-info">
+                        <h2 id="attendanceCount">98</h2>
+                        <p>Today's Attendance</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-credit-card"></i></div>
+                    <div class="card-info">
+                        <h2 id="pendingPayments">5</h2>
+                        <p>Pending Payments</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="card-info">
+                        <h2 id="assignmentsReview">3</h2>
+                        <p>Assignments to Review</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Recent Activity -->
+            <section class="recent-activity">
+                <h2>Recent Activity</h2>
+                <table class="activity-table" aria-label="Recent Activity">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityList">
+                        <tr>
+                            <td>Ahmed submitted Assignment 2</td>
+                            <td>2 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>Payment verified for Student X</td>
+                            <td>10 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>Attendance marked for Class A</td>
+                            <td>30 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>Sarah uploaded Assignment 1</td>
+                            <td>1 hr ago</td>
+                        </tr>
+                        <tr>
+                            <td>New student registered: Omar</td>
+                            <td>2 hrs ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <!-- Notification Panel -->
+            <div class="notification-panel" id="notificationPanel" hidden>
+                <h3>Notifications</h3>
+                <ul>
+                    <li>New payment received</li>
+                    <li>Assignment 3 submitted</li>
+                    <li>Attendance alert for Class B</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>

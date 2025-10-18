@@ -1,6 +1,6 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Service;
+using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,11 +33,14 @@ namespace CincoAcadimy.Controllers
             return Ok(assessment);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Add(AddAssessmentDto dto)
+        [HttpPost("add")]
+        public async Task<IActionResult> Add([FromForm] AddAssessmentDto dto)
         {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Title) || dto.SessionId <= 0)
+                return BadRequest(new { message = "Invalid assessment data." });
+
             await _service.AddAsync(dto);
-            return Ok(new { message = "Assessment created successfully" });
+            return Ok(new { message = "Assessment created successfully." });
         }
 
         [HttpPut("{id}")]
@@ -53,8 +56,6 @@ namespace CincoAcadimy.Controllers
             await _service.DeleteAsync(id);
             return Ok(new { message = "Assessment deleted successfully" });
         }
-
-
 
         [HttpPost("upload")]
         public async Task<IActionResult> Create(UploadDto request)
@@ -73,5 +74,24 @@ namespace CincoAcadimy.Controllers
 
             return Ok(assessments);
         }
+
+        [HttpGet("StudentAssessmen")]
+        public async Task<ActionResult<IEnumerable<StudentAssessmentReadDto>>> GetAllStudentAssessmenAsync()
+        {
+            var result = await _service.GetAllStudentAssessmenAsync();
+            return Ok(result);
+        }
+
+        [HttpPut("update-grade")]
+        public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDto dto)
+        {
+            var result = await _service.UpdateGradeAsync(dto.StudentId, dto.AssessmentId, dto.Grade);
+
+            if (!result)
+                return NotFound(new { message = "Student assessment not found." });
+
+            return Ok(new { message = "Grade updated successfully." });
+        }
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using CincoAcadimy.DTOs;
-using CincoAcadimy.Service;
+using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,5 +73,27 @@ namespace CincoAcadimy.Controllers
 
             return Ok(sessions);
         }
+
+        [HttpGet("{sessionId}/student/{studentId}/attendance")]
+        public async Task<IActionResult> GetStudentAttendance(int sessionId, int studentId)
+        {
+            var attendance = await _service.GetStudentSessionAttendanceAsync(sessionId, studentId);
+            if (attendance == null)
+                return NotFound();
+
+            return Ok(attendance);
+        }
+
+        [HttpPut("{sessionId}/student/{studentId}/completion")]
+        public async Task<IActionResult> UpdateCompletion(int sessionId, int studentId, [FromBody] UpdateCompletionDto dto)
+        {
+            var success = await _service.UpdateCompletionAsync(sessionId, studentId, dto.IsCompleted);
+
+            if (success)
+                return Ok(new { Message = "Completion status updated successfully." });
+
+            return BadRequest(new { Message = "Failed to update or create completion record." });
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CincoAcadimy.Models;
+using CincoAcadimy.Repository.@interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace CincoAcadimy.Repository
@@ -65,9 +66,42 @@ namespace CincoAcadimy.Repository
             return await _context.Sessions
                 .Where(s => s.CourseId == courseId)
                 .Include(s => s.Resources)
-                 .Include(s => s.StudentSessions) // هنستخدمها عشان نعرف الطالب خلص ولا لأ
-                .ToListAsync();
+                .Include(s => s.StudentSessions) // هنستخدمها عشان نعرف الطالب خلص ولا لأ
+                .Include(s => s.Course).ToListAsync();
         }
 
+        // NEW METHOD
+        public async Task<StudentSession> GetStudentSessionAttendanceAsync(int sessionId, int studentId)
+        {
+            return await _context.StudentSessions
+                .FirstOrDefaultAsync(ss => ss.SessionId == sessionId && ss.StudentId == studentId);
+        }
+
+        public async Task<bool> UpdateCompletionAsync(int sessionId, int studentId, bool isCompleted)
+        {
+            var record = await _context.StudentSessions
+                .FirstOrDefaultAsync(ss => ss.SessionId == sessionId && ss.StudentId == studentId);
+
+            if (record == null)
+            {
+                // ⬇️ لو السجل مش موجود → أضفه جديد
+                record = new StudentSession
+                {
+                    SessionId = sessionId,
+                    StudentId = studentId,
+                    IsCompleted = isCompleted
+                };
+
+                _context.StudentSessions.Add(record);
+            }
+            else
+            {
+                // ⬇️ لو موجود → حدث الحالة
+                record.IsCompleted = isCompleted;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

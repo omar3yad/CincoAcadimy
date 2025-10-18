@@ -1,18 +1,20 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Repository;
+using CincoAcadimy.Repository.@interface;
+using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Service
 {
     public class AssessmentService : IAssessmentService
     {
         private readonly IAssessmentRepository _repository;
+        private readonly IWebHostEnvironment _env;
 
-        public AssessmentService(IAssessmentRepository repository)
+        public AssessmentService(IAssessmentRepository repository, IWebHostEnvironment env)
         {
             _repository = repository;
+            _env = env;
         }
-
         public async Task<IEnumerable<AssessmentDto>> GetAllAsync()
         {
             var assessments = await _repository.GetAllAsync();
@@ -47,11 +49,35 @@ namespace CincoAcadimy.Service
 
         public async Task AddAsync(AddAssessmentDto dto)
         {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            string filePath = null;
+            if (dto.File != null && dto.File.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.File.FileName);
+                var fullPath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await dto.File.CopyToAsync(stream);
+                }
+
+                filePath = "/uploads/" + fileName;
+            }
+
+            if (string.IsNullOrEmpty(filePath))
+                throw new InvalidOperationException("File upload is required.");
+
             var assessment = new Assessment
             {
                 Title = dto.Title,
                 Description = dto.Description,
-                FilePath = dto.FileType,
+                DueDate = dto.DueDate,
+                FilePath = filePath ?? string.Empty,
                 SessionId = dto.SessionId
             };
 
@@ -101,6 +127,32 @@ namespace CincoAcadimy.Service
                 FilePath = a.FilePath,
                 SessionId = a.SessionId
             }).ToList();
+        }
+
+        public async Task<IEnumerable<StudentAssessmentReadDto>> GetAllStudentAssessmenAsync()
+        {
+            var entities = await _repository.GetAllStudentAssessmenAsync();
+            return entities.Select(e => new StudentAssessmentReadDto
+            {
+                StudentId = e.StudentId,
+                StudentName = e.Student.User.FullName,
+                AssessmentTitle = e.Assessment.Title,
+                AssessmentId = e.AssessmentId,
+                SubmittedAt = e.SubmittedAt,
+                Grade = e.Grade,
+                SubmissionLink = e.SubmissionLink
+            });
+        }
+        public async Task<bool> UpdateGradeAsync(int studentId, int assessmentId, int grade)
+        {
+            var studentAssessment = await _repository.GetStudentAssessmentAsync(studentId, assessmentId);
+
+            if (studentAssessment == null)
+                return false;
+
+            studentAssessment.Grade = grade;
+            await _repository.UpdateStudentAssessmentAsync(studentAssessment);
+            return true;
         }
 
     }

@@ -1,0 +1,655 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل المدفوعات - Cinco Academy</title>
+    <link rel="stylesheet" href="student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .payments-container {
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+            .page-header h1 {
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+            }
+
+            .page-header p {
+                color: var(--dark-gray);
+            }
+
+        .payments-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .payment-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .payment-title {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-approved {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+
+        .status-pending {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f39c12;
+        }
+
+        .status-rejected {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .payment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-view {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-view:hover {
+                background: #e04e1b;
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                color: var(--medium-gray);
+                margin-bottom: 1rem;
+            }
+
+            .empty-state h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            .empty-state p {
+                color: var(--dark-gray);
+                margin-bottom: 1.5rem;
+            }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--medium-gray);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .payment-id {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .course-link:hover {
+                text-decoration: underline;
+            }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius);
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .payments-container {
+                padding: 1rem;
+            }
+
+            .payment-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .payment-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body dir="rtl">
+    <!-- Top Navigation Bar -->
+    <nav class="navbar" dir="ltr">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <h1><i class="fas fa-graduation-cap"></i> Cinco Academy</h1>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="profile">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Student Profile">
+                        <span id="student-name">Student Name</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container" dir="ltr">
+        <!-- Sidebar -->
+        <aside class="sidebar" dir="ltr">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="student.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-book"></i>
+                        <span>My Courses</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="payments.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" dir="rtl">
+            <div class="payments-container">
+                <div class="page-header">
+                    <h1><i class="fas fa-history"></i> سجل المدفوعات</h1>
+                    <p>عرض جميع عمليات الدفع السابقة وحالتها</p>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <p>جاري تحميل سجل المدفوعات...</p>
+                </div>
+
+                <!-- Payments Grid -->
+                <div class="payments-grid" id="paymentsGrid" style="display: none;">
+                    <!-- Payments will be populated here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-receipt"></i>
+                    <h3>لا توجد مدفوعات سابقة</h3>
+                    <p>لم تقم بأي عمليات دفع حتى الآن.</p>
+                    <a href="courses.html" class="btn-primary">
+                        <i class="fas fa-book"></i> تصفح الكورسات
+                    </a>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-state" id="errorState" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>حدث خطأ في تحميل البيانات</h3>
+                    <p>تعذر تحميل سجل المدفوعات. يرجى المحاولة مرة أخرى.</p>
+                    <button id="retryBtn" class="btn-primary">
+                        <i class="fas fa-redo"></i> إعادة المحاولة
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Image Preview -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="modalImage" class="modal-image" src="" alt="Payment Screenshot">
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'https://localhost:44380/api';
+
+        // التحقق من تسجيل الدخول
+        const token = localStorage.getItem("token");
+        const studentId = localStorage.getItem("studentId");
+
+        if (!token || !studentId) {
+            window.location.href = "login.html";
+        }
+
+        // تحديث اسم الطالب في الشريط العلوي
+        document.getElementById('student-name').textContent = localStorage.getItem("studentName") || "الطالب";
+
+        // عناصر DOM
+        const loadingState = document.getElementById('loadingState');
+        const paymentsGrid = document.getElementById('paymentsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const errorState = document.getElementById('errorState');
+        const retryBtn = document.getElementById('retryBtn');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+
+        // تحميل بيانات المدفوعات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', function () {
+            loadPayments();
+        });
+
+        // إعادة المحاولة
+        retryBtn.addEventListener('click', function () {
+            loadPayments();
+        });
+
+        // إغلاق المودال
+        modalClose.addEventListener('click', function () {
+            imageModal.style.display = 'none';
+        });
+
+        // إغلاق المودال عند النقر خارج الصورة
+        imageModal.addEventListener('click', function (e) {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+        // دال تحميل المدفوعات
+        async function loadPayments() {
+            try {
+                showLoadingState();
+
+                const response = await fetch(`${API_BASE_URL}/Payments/student/${studentId}`);
+        
+                console.log('Response status:', response.status); // للتأكد من نجاح الطلب
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const payments = await response.json();
+        
+                console.log('Payments data:', payments); // لرؤية البيانات المستلمة
+                console.log('Number of payments:', payments.length); // لمعرفة عدد العناصر
+
+                hideLoadingState();
+
+                if (payments && payments.length > 0) {
+                    displayPayments(payments);
+                } else {
+                    showEmptyState();
+                }
+
+            } catch (error) {
+                console.error('Error loading payments:', error);
+                hideLoadingState();
+                showErrorState();
+            }
+        }
+        // دالة عرض المدفوعات
+        function displayPayments(payments) {
+            paymentsGrid.innerHTML = '';
+    
+            console.log('Displaying payments:', payments); // للتأكد من البيانات المعروضة
+
+            // ترتيب المدفوعات من الأحدث إلى الأقدم
+            payments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+            console.log('Sorted payments:', payments); // للتأكد من الترتيب
+
+            payments.forEach((payment, index) => {
+                console.log(`Creating card for payment ${index}:`, payment); // تتبع كل دفعة
+                const paymentCard = createPaymentCard(payment);
+                paymentsGrid.appendChild(paymentCard);
+            });
+
+            console.log('Number of cards created:', paymentsGrid.children.length); // عدد البطاقات المنشأة
+    
+            paymentsGrid.style.display = 'grid';
+        }
+        // دالة عرض المدفوعات
+        // دالة عرض المدفوعات
+        async function displayPayments(payments) {
+            paymentsGrid.innerHTML = '';
+
+            // ترتيب المدفوعات من الأحدث إلى الأقدم
+            payments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            for (const payment of payments) {
+                const paymentCard = await createPaymentCard(payment); // هنا ننتظر الكارت
+                paymentsGrid.appendChild(paymentCard);
+            }
+
+            paymentsGrid.style.display = 'grid';
+        }
+
+        // دالة إنشاء بطاقة الدفع
+        // دالة إنشاء بطاقة الدفع
+        async function createPaymentCard(payment) {
+            const card = document.createElement('div');
+            card.className = 'payment-card';
+
+            // جلب بيانات الكورس من API
+            let courseTitle = "جارٍ التحميل...";
+            try {
+                const courseResponse = await fetch(`${API_BASE_URL}/Course/${payment.courseId}`);
+                if (courseResponse.ok) {
+                    const courseData = await courseResponse.json();
+                    courseTitle = courseData.title || `Course #${payment.courseId}`;
+                } else {
+                    courseTitle = `Course #${payment.courseId}`;
+                }
+            } catch (err) {
+                console.error("Error loading course title:", err);
+                courseTitle = `Course #${payment.courseId}`;
+            }
+
+            // تنسيق التاريخ
+            const paymentDate = new Date(payment.createdAt);
+            const formattedDate = paymentDate.toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // تنسيق السعر
+            const formattedPrice = payment.coursePrice ? `EGP ${payment.coursePrice.toFixed(2)}` : 'غير محدد';
+
+            // حالة الدفع
+            const statusClass = getStatusClass(payment.status);
+            const statusText = getStatusText(payment.status);
+
+            card.innerHTML = `
+        <div class="payment-header">
+            <div>
+                <div class="payment-id">رقم العملية: #${payment.id}</div>
+                <h3 class="payment-title">دفع رسوم كورس: ${courseTitle}</h3>
+            </div>
+            <span class="payment-status ${statusClass}">${statusText}</span>
+        </div>
+
+        <div class="payment-details">
+            <div class="detail-item">
+                <span class="detail-label">رقم الهاتف</span>
+                <span class="detail-value">${payment.phone}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">المبلغ</span>
+                <span class="detail-value">${formattedPrice}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">تاريخ الدفع</span>
+                <span class="detail-value">${formattedDate}</span>
+            </div>
+        </div>
+
+        <div class="payment-actions">
+            ${payment.screenshotPath ?
+                    `<button class="btn-view view-screenshot" data-image="${payment.screenshotPath}">
+            <i class="fas fa-image"></i> عرض صورة التحويل
+        </button>` : ''
+                }
+            <a href="course.html?course=${payment.courseId}" class="btn-view">
+                <i class="fas fa-external-link-alt"></i> الذهاب للكورس
+            </a>
+        </div>
+    `;
+
+            // عرض الصورة عند الضغط على الزر
+            const viewButton = card.querySelector('.view-screenshot');
+            if (viewButton) {
+                viewButton.addEventListener('click', function () {
+                    const imagePath = this.getAttribute('data-image');
+                    showImageModal(imagePath);
+                });
+            }
+
+            return card;
+        }
+
+
+        // دالة للحصول على كلاس حالة الدفع
+        function getStatusClass(status) {
+            switch (status?.toLowerCase()) {
+                case 'approved':
+                    return 'status-approved';
+                case 'pending':
+                    return 'status-pending';
+                case 'rejected':
+                    return 'status-rejected';
+                default:
+                    return 'status-pending';
+            }
+        }
+
+        // دالة للحصول على نص حالة الدفع
+        function getStatusText(status) {
+            switch (status?.toLowerCase()) {
+                case 'approved':
+                    return 'مقبول';
+                case 'pending':
+                    return 'قيد المراجعة';
+                case 'rejected':
+                    return 'مرفوض';
+                default:
+                    return 'قيد المراجعة';
+            }
+        }
+
+        // دالة عرض صورة التحويل في المودال
+        function showImageModal(imagePath) {
+            // بناء الرابط الكامل للصورة
+            const fullImageUrl = `https://localhost:44380${imagePath}`;
+            modalImage.src = fullImageUrl;
+            imageModal.style.display = 'flex';
+        }
+
+        // إدارة حالات التحميل
+        function showLoadingState() {
+            loadingState.style.display = 'flex';
+            paymentsGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+            errorState.style.display = 'none';
+        }
+
+        function hideLoadingState() {
+            loadingState.style.display = 'none';
+        }
+
+        function showEmptyState() {
+            emptyState.style.display = 'block';
+        }
+
+        function showErrorState() {
+            errorState.style.display = 'flex';
+        }
+
+        // إضافة تأثيرات للواجهة
+        document.addEventListener('DOMContentLoaded', function () {
+            // إضافة تأثيرات للبطاقات
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // تطبيق التأثير على البطاقات الجديدة
+            setTimeout(() => {
+                document.querySelectorAll('.payment-card').forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    observer.observe(card);
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

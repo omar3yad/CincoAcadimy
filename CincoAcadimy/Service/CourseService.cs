@@ -1,6 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Repository;
+using CincoAcadimy.Repository.@interface;
+using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Service
 
@@ -24,10 +25,13 @@ namespace CincoAcadimy.Service
                 Id = c.Id,
                 Title = c.Title,
                 Description = c.Description,
-                InstructorName = c.Instructor?.User?.FullName ?? "Unknown"
+                Duration = c.Duration,
+                ImageUrl = c.ImageUrl,
+                Price = c.Price,
+                InstructorName = c.Instructor != null ? c.Instructor.User.UserName : "Unknown"
+
             });
         }
-
 
         public async Task<CourseDto?> GetCourseByIdAsync(int id)
         {
@@ -39,10 +43,12 @@ namespace CincoAcadimy.Service
                 Id = course.Id,
                 Title = course.Title,
                 Description = course.Description,
+                Duration = course.Duration,
+                ImageUrl = course.ImageUrl,
+                Price = course.Price,
                 InstructorName = course.Instructor?.User?.FullName ?? "Unknown"
             };
         }
-
 
         public async Task AddCourseAsync(CreateCourseDto dto)
         {
@@ -50,6 +56,9 @@ namespace CincoAcadimy.Service
             {
                 Title = dto.Title,
                 Description = dto.Description,
+                ImageUrl = dto.ImageUrl,
+                Duration = dto.duration,
+                Price = dto.Price,
                 InstructorId = dto.InstructorId
             };
 
@@ -82,6 +91,7 @@ namespace CincoAcadimy.Service
                     Title = c.Title,
                     InstructorName = c.Instructor != null ? c.Instructor.User.UserName : "Unknown",
                     Progress = CalculateProgress(c, studentId),
+                    Description = c.Description,
                     NextLesson = nextLesson != null ? new SessionDto
                     {
                         Id = nextLesson.Id,
@@ -102,6 +112,40 @@ namespace CincoAcadimy.Service
 
             var completed = sessions.Count(s => s.StudentSessions.FirstOrDefault()?.IsCompleted == true);
             return (int)((double)completed / sessions.Count * 100);
+        }
+
+        public async Task<IEnumerable<StudentDto>> GetStudentsByCourseIdAsync(int courseId)
+        {
+            return await _repository.GetStudentsByCourseIdAsync(courseId);
+        }
+
+        public async Task<CourseCountsDto> GetCourseCountsAsync(int courseId)
+        {
+            var (studentsCount, sessionsCount) = await _repository.GetCountsAsync(courseId);
+            return new CourseCountsDto
+            {
+                StudentsCount = studentsCount,
+                SessionsCount = sessionsCount
+            };
+        }
+
+        public Task<IEnumerable<AllCourseDto>> GetAllCoursesForStudentAsync(int studentId)
+        {
+            return _repository.GetAllCoursesForStudentAsync(studentId);
+        }
+
+        public Task<AllCourseDto?> GetCourseForStudentAsync(int courseId, int studentId)
+        {
+            return _repository.GetCourseForStudentAsync(courseId, studentId);
+        }
+        public async Task<bool> UpdateEnrollmentStatusAsync(UpdateEnrollmentStatusDto dto)
+        {
+            var studentCourse = await _repository.GetStudentCourseAsync(dto.StudentId, dto.CourseId);
+            if (studentCourse == null)
+                return false;
+
+            studentCourse.IsEnrolled = dto.IsEnrolled;
+            return await _repository.UpdateEnrollmentStatusAsync(studentCourse);
         }
     }
 }

@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <None Include="DTOs\CourseUpdateDto.cs" />
+    <None Include="wwwroot\HR\css\style.css" />
+    <None Include="wwwroot\HR\html\index.html" />
+    <None Include="wwwroot\HR\js\script.js" />
   </ItemGroup>
 
   <ItemGroup>

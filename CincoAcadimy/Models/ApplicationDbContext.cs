@@ -23,6 +23,7 @@ namespace CincoAcadimy.Models
         public DbSet<StudentSession> StudentSessions { get; set; }
         public DbSet<StudentAssessment> StudentAssessments { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

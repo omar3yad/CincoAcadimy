@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment Management</title>
+    <title>Attendance Management - CincoAcademy HR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/attendance.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/assessment.css">
+</head>
+<body>
+    <div class="container">
+
+        <aside class="sidebar" aria-label="Sidebar Navigation">
+            <div class="sidebar-header">
+                <img src="../img/hr-logo.png" alt="HR Logo" class="logo" />
+                <span class="sidebar-title">CincoAcademy HR</span>
+                <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="attendance.html"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
+                    <li class="active"><a href="assessment.html"><i class="fas fa-file-alt"></i> <span>Assignments</span></a></li>
+                    <li><a href="#"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> <span>Students</span></a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Sidebar (reuse from home/attendance) -->
+        <!--<nav class="sidebar" aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="attendance.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+                <li class="active"><a href="assessment.html"><i class="fas fa-file-alt"></i> Assessments</a></li>
+            </ul>
+        </nav>-->
+        <!-- Top Bar (reuse from home/attendance) -->
+        <!--<header class="topbar">
+            <span class="logo">CincoAcadimy HR Dashboard</span>
+            <span class="user"><i class="fas fa-user"></i> HR Manager</span>
+        </header>-->
+        <main class="main-content">
+            <!-- Header / Top Bar -->
+            <header class="top-bar">
+                <div class="top-left">
+                    <img src="../img/hr-logo.png" alt="HR Logo" class="logo-small" />
+                </div>
+                <div class="top-right">
+                    <button class="notification-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot" id="notifDot"></span>
+                    </button>
+                    <div class="profile-menu">
+                        <img src="../img/profile.png" alt="Profile" class="profile-icon" />
+                        <span class="profile-name">HR Admin</span>
+                        <button class="profile-dropdown-btn" aria-label="Profile Menu">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="profile-dropdown" id="profileDropdown" aria-label="Profile Dropdown" hidden>
+                            <a href="#">Settings</a>
+                            <a href="#">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Page Title -->
+            <h1>Assessment Management</h1>
+            <section class="card">
+                <form id="assessmentForm" aria-label="Add Assessment" autocomplete="off">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Title <span class="required">*</span></label>
+                            <input type="text" id="title" name="title" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dueDate">Due Date <span class="required">*</span></label>
+                            <input type="date" id="dueDate" name="dueDate" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="file">File Upload</label>
+                            <input type="file" id="file" name="file" aria-label="Upload file">
+                            <span id="filePreview" class="file-preview" aria-live="polite"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="sessionSelect">Session</label>
+                            <select id="sessionSelect" name="session" required aria-required="true">
+                                <option value="">Select Session</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Assessment</button>
+                </form>
+            </section>
+            <section class="table-section">
+                <h2>Assessments</h2>
+                <table id="assessmentTable" aria-label="Assessments Table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Due Date</th>
+                            <th>File</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assessmentTableBody"></tbody>
+                </table>
+            </section>
+            <section class="table-section">
+                <h2>Student Submissions</h2>
+                <table id="submissionTable" aria-label="Student Submissions Table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Assessment ID</th>
+                            <th>Assessment Title</th>
+                            <th>File</th>
+                            <th>Submission Date</th>
+                            <th>Grade</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissionTableBody"></tbody>
+                </table>
+            </section>
+        </main>
+        <div id="assessmentToast" class="toast" hidden></div>
+    </div>
+        <script src="../js/assessment.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details - Cinco Academy</title>
+    <link rel="stylesheet" href="student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <h1><i class="fas fa-graduation-cap"></i> Cinco Academy</h1>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="profile">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Student Profile">
+                        <span>Sarah Johnson</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="student.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a href="#">
+                        <i class="fas fa-book"></i>
+                        <span>My Courses</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="payments.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Course Header -->
+            <section class="course-header">
+                <div class="breadcrumb">
+                    <a href="student.html" class="breadcrumb-link">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                </div>
+                <div class="course-hero">
+                    <div class="course-hero-content">
+                        <h1 id="course-title">Advanced Web Development</h1>
+                        <p id="course-description">Master modern web development with React, Node.js, and MongoDB</p>
+                        <div class="course-meta">
+                            <span class="instructor" id="course-instructor">
+                                <i class="fas fa-user"></i>
+                                Instructor: Omar Ayman
+                            </span>
+                            <span class="progress" id="course-progress">
+                                <i class="fas fa-chart-line"></i>
+                                65% Complete
+                            </span>
+                        </div>
+                        <div class="progress-bar large">
+                            <div class="progress-fill" id="course-progress-bar" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="course-hero-image">
+                        <img id="course-thumbnail" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Course Thumbnail">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Content -->
+            <section class="course-content">
+                <div class="content-grid">
+                    <!-- Lessons Sidebar -->
+                    <div class="lessons-sidebar">
+                        <div class="lessons-header">
+                            <h3>Course Content</h3>
+                            <span class="lessons-count" id="lessons-count">8 lessons • 4h 30m</span>
+                        </div>
+                        <div class="lessons-list" id="lessons-list">
+                            <!-- Lessons will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Lesson Content -->
+                    <div class="lesson-content">
+                        <div class="lesson-player">
+                            <div class="video-placeholder" id="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <p>Select a lesson to start learning</p>
+                            </div>
+                            <div class="video-player" id="video-player" style="display: none;">
+                                <!-- Video player would go here -->
+                                <div class="video-container">
+                                    <div class="video-placeholder-large">
+                                        <i class="fas fa-play-circle"></i>
+                                        <p>Video Player</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lesson-details" id="lesson-details" style="display: none;">
+                            <div class="lesson-header">
+                                <h2 id="lesson-title">Lesson Title</h2>
+                                <div class="lesson-actions">
+                                    <button class="btn-secondary" id="prev-lesson">
+                                        <i class="fas fa-chevron-left"></i>
+                                        Previous
+                                    </button>
+                                    <button class="btn-primary" id="next-lesson">
+                                        Next
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="lesson-description">
+                                <h3>About this lesson</h3>
+                                <p id="lesson-description">Lesson description will appear here...</p>
+                            </div>
+
+                            <div class="lesson-resources">
+                                <h3>Resources</h3>
+                                <div class="resources-list" id="resources-list">
+                                    <!-- Resources will be populated by JavaScript -->
+                                </div>
+                            </div>
+
+                            <div class="assessment" id="assessmentSection" style="display:none">
+                                <h3>Assessment</h3>
+                                <p class="muted">Test your understanding of this session.</p>
+
+                                <div class="assessment-card" id="assessmentCard">
+                                    <!-- dynamic content here -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="welcome-message" id="welcome-message">
+                            <div class="welcome-content">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h2>Welcome to the Course!</h2>
+                                <p>Select a lesson from the sidebar to start your learning journey. Each lesson includes video content, resources, and exercises to help you master the material.</p>
+                                <div class="course-stats">
+                                    <div class="stat">
+                                        <span class="stat-value" id="total-lessons">8</span>
+                                        <span class="stat-label">Lessons</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value" id="completed-lessons">5</span>
+                                        <span class="stat-label">Completed</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value" id="total-duration">4h 30m</span>
+                                        <span class="stat-label">Total Duration</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="course.js"></script>
+    <!--<script src="sessionService.js"></script>-->
+</body>
+</html>

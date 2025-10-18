@@ -1,0 +1,271 @@
+﻿:root {
+    --primary-blue: #0a2e5d;
+    --primary-teal: #00b3a4;
+    --gray-bg: #f5f7fa;
+    --card-bg: #fff;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --border-radius: 16px;
+    --font-main: 'Poppins', Arial, sans-serif;
+    --accent: #e74c3c;
+}
+
+.attendance-title h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin: 24px 0 12px 0;
+}
+
+.attendance-filter {
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    padding: 18px 24px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#filterForm {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+    #filterForm input[type="date"],
+    #filterForm select,
+    #filterForm input[type="text"] {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        font-family: var(--font-main);
+        background: var(--gray-bg);
+        transition: border 0.2s;
+    }
+
+        #filterForm input:focus,
+        #filterForm select:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+        }
+
+.filter-btn {
+    background: var(--primary-teal);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .filter-btn:hover {
+        background: var(--primary-blue);
+    }
+
+.attendance-actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.action-btn {
+    background: var(--gray-bg);
+    color: var(--primary-blue);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .action-btn:hover {
+        background: var(--primary-teal);
+        color: #fff;
+        transform: translateY(-2px) scale(1.03);
+    }
+
+    .action-btn.primary {
+        background: var(--primary-teal);
+        color: #fff;
+    }
+
+        .action-btn.primary:hover {
+            background: var(--primary-blue);
+        }
+
+.attendance-table-section {
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    padding: 18px 0 0 0;
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-main);
+    margin-bottom: 0;
+}
+
+    .attendance-table thead {
+        position: sticky;
+        top: 0;
+        background: var(--gray-bg);
+        z-index: 2;
+    }
+
+    .attendance-table th, .attendance-table td {
+        padding: 12px 10px;
+        text-align: left;
+        font-size: 1rem;
+    }
+
+    .attendance-table th {
+        color: var(--primary-blue);
+        font-weight: 600;
+        background: var(--gray-bg);
+        border-bottom: 2px solid #eee;
+    }
+
+    .attendance-table tbody tr:nth-child(even) {
+        background: var(--gray-bg);
+    }
+
+    .attendance-table tbody tr:nth-child(odd) {
+        background: #fff;
+    }
+
+    .attendance-table select,
+    .attendance-table input[type="text"] {
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        padding: 6px 8px;
+        font-size: 1rem;
+        font-family: var(--font-main);
+        background: #f9f9f9;
+        transition: border 0.2s;
+    }
+
+        .attendance-table select:focus,
+        .attendance-table input[type="text"]:focus {
+            border-color: var(--primary-teal);
+            outline: none;
+        }
+
+/* Toast Styling */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #323232;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 9999;
+}
+
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive: Table becomes card-like list */
+@media (max-width: 700px) {
+    .attendance-table-section {
+        padding: 8px 0 0 0;
+    }
+
+    .attendance-table, .attendance-table thead, .attendance-table tbody, .attendance-table th, .attendance-table td, .attendance-table tr {
+        display: block;
+        width: 100%;
+    }
+
+        .attendance-table thead {
+            display: none;
+        }
+
+        .attendance-table tbody tr {
+            margin-bottom: 16px;
+            background: var(--gray-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 12px;
+        }
+
+        .attendance-table td {
+            padding: 8px 0;
+            font-size: 1rem;
+            border: none;
+            display: flex;
+            align-items: center;
+        }
+
+            .attendance-table td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--primary-blue);
+                min-width: 120px;
+                margin-right: 12px;
+            }
+
+}
+/* Modern select styling */
+.status-select {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+    .status-select:hover {
+        border-color: #4caf50;
+        background: #fff;
+    }
+
+    .status-select:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }

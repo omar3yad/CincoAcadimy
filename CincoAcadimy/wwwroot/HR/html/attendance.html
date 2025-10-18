@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Management - CincoAcademy HR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/attendance.css">
+</head>
+<body>  
+    <div class="container">
+        <!-- Sidebar (same as Home Page) -->
+        <aside class="sidebar" aria-label="Sidebar Navigation">
+            <div class="sidebar-header">
+                <img src="../img/hr-logo.png" alt="HR Logo" class="logo" />
+                <span class="sidebar-title">CincoAcademy HR</span>
+                <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li class="active"><a href="attendance.html"><i class="fas fa-calendar-check"></i> <span>Attendance</span></a></li>
+                    <li><a href="assessment.html"><i class="fas fa-file-alt"></i> <span>Assignments</span></a></li>
+                    <li ><a href="#"><i class="fas fa-credit-card"></i> <span>Payments</span></a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> <span>Students</span></a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> <span>Reports</span></a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header / Top Bar -->
+            <header class="top-bar">
+                <div class="top-left">
+                    <img src="../img/hr-logo.png" alt="HR Logo" class="logo-small" />
+                </div>
+                <div class="top-right">
+                    <button class="notification-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot" id="notifDot"></span>
+                    </button>
+                    <div class="profile-menu">
+                        <img src="../img/profile.png" alt="Profile" class="profile-icon" />
+                        <span class="profile-name">HR Admin</span>
+                        <button class="profile-dropdown-btn" aria-label="Profile Menu">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="profile-dropdown" id="profileDropdown" aria-label="Profile Dropdown" hidden>
+                            <a href="#">Settings</a>
+                            <a href="#">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Page Title -->
+            <section class="attendance-title">
+                <h1>Attendance Management</h1>
+            </section>
+            <!-- Filter/Search Bar -->
+            <section class="attendance-filter">
+                <form id="filterForm" aria-label="Attendance Filter">
+                    <label for="courseSelect">Course:</label>
+                    <select id="courseSelect" name="courseSelect" aria-label="Select Course" required>
+                        <option value="">Select Course</option>
+                    </select>
+                    <label for="sessionSelect">Session:</label>
+                    <select id="sessionSelect" name="sessionSelect" aria-label="Select Session" required>
+                        <option value="">Select Session</option>
+                    </select>
+                    <input type="text" id="studentSearch" name="studentSearch" placeholder="Search by name or ID" aria-label="Search Student">
+                    <button type="submit" class="filter-btn"><i class="fas fa-search"></i> Filter</button>
+                </form>
+            </section>
+            <!-- Quick Actions -->
+            <section class="attendance-actions">
+                <button class="action-btn" id="markAllPresent"><i class="fas fa-user-check"></i> Mark All Present</button>
+                <button class="action-btn" id="markAllAbsent"><i class="fas fa-user-times"></i> Mark All Absent</button>
+                <button class="action-btn primary" id="saveAttendance"><i class="fas fa-save"></i> Save Attendance</button>
+            </section>
+            <!-- Attendance Table -->
+            <section class="attendance-table-section">
+                <table class="attendance-table" aria-label="Attendance Table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <!-- Rows will be rendered by JS -->
+                    </tbody>
+                </table>
+            </section>
+            <!-- Toast Notification -->
+            <!-- Toast Notification -->
+            <div class="toast" id="attendanceToast" aria-live="polite" hidden>
+                <i class="fas fa-check-circle"></i> <span id="toastMessage">Attendance saved successfully!</span>
+            </div>
+
+        </main>
+    </div>
+    <!--<script src="../js/script.js"></script>-->
+    <script src="../js/attendance.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Admin Dashboard</title>
+    <link rel="stylesheet" href="/Admin/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="sidebar-container" class="sidebar"></div>
+
+        <script>
+            // Load sidebar dynamically
+            fetch('/Admin/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading sidebar:', error));
+        </script>
+        <div class="main-content">
+            <div class="header">
+                <h1>Sessions</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Admin User">
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Administrator</div>
+                    </div>
+                </div>
+            </div>
+            <div id="courses-list" class="tab-content active">
+                <div class="table-container">
+                    <h1>Course Sessions</h1>
+                    <table id="sessions-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Session Name</th>
+                                <th>Description</th>
+                                <th>Video</th>
+                                <th>Resources</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // ✅ تحميل السايدبار
+            fetch("/Admin/html/sidebar.html")
+                .then(res => res.text())
+                .then(data => document.getElementById("sidebar-container").innerHTML = data);
+
+            // ✅ جلب courseId من الرابط
+            const params = new URLSearchParams(window.location.search);
+            const courseId = params.get("courseId");
+
+            if (courseId) {
+                fetch(`https://localhost:44380/api/Session/course/${courseId}`)
+                    .then(res => res.json())
+                    .then(sessions => {
+                        const tbody = document.querySelector("#sessions-table tbody");
+                        tbody.innerHTML = "";
+
+                        if (sessions.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="6">No sessions found for this course.</td></tr>`;
+                        } else {
+                            sessions.forEach(session => {
+                                // ✅ بناء قائمة الـ Resources
+                                const resourcesHTML = session.resources && session.resources.length > 0
+                                    ? session.resources.map(r => `
+                                            <a href="${r.url}" class="resource-link" target="_blank">
+                                              ${r.title} (${r.fileType})
+                                            </a>
+                                          `).join("")
+                                    : "No resources";
+
+                                // ✅ بناء الصف
+                                const tr = document.createElement("tr");
+                                tr.innerHTML = `
+                                        <td>${session.id}</td>
+                                        <td>${session.name}</td>
+                                        <td>${session.description}</td>
+                                        <td>
+                                          <a href="${session.videoUrl}" target="_blank">Watch Video</a>
+                                        </td>
+                                        <td>${resourcesHTML}</td>
+                                        <td class="${session.isCompleted ? 'completed' : 'not-completed'}">
+                                          ${session.isCompleted ? 'Completed' : 'Pending'}
+                                        </td>
+                                      `;
+                                tbody.appendChild(tr);
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error loading sessions:", err);
+                        alert("Failed to load sessions data.");
+                    });
+            } else {
+                alert("No course selected!");
+            }
+        </script>
+</body>
+</html>

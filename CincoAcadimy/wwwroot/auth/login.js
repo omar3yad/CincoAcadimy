@@ -29,7 +29,7 @@
             if (data.role === "Admin") {
                 window.location.href = "/frontend/admin/index.html";
             } else if (data.role === "Student") {
-                window.location.href = "/Student/html/index.html";
+                window.location.href = "/Students/html/student.html";
             } else if (data.role === "HR") {
                 window.location.href = "/frontend/hr/index.html";
             }

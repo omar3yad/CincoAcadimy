@@ -3,42 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Courses</title>
+    <title>LMS Admin Dashboard</title>
     <link rel="stylesheet" href="/Admin/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Course Management (Admin)</h1>
+        <!-- Sidebar -->
+        <div id="sidebar-container" class="sidebar"></div>
 
-        <section class="add-course">
-            <h2>Add New Course</h2>
-            <form id="addCourseForm">
-                <input type="text" id="title" placeholder="Course Title" required>
-                <input type="text" id="description" placeholder="Course Description" required>
-                <input type="text" id="instructorName" placeholder="Instructor Name" required>
-                <button type="submit">Add Course</button>
-            </form>
-        </section>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Admin User">
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Administrator</div>
+                    </div>
+                </div>
+            </div>
 
-        <section class="course-list">
-            <h2>All Courses</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Instructor</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="courseTableBody">
-                    <!-- Courses will be populated here -->
-                </tbody>
-            </table>
-        </section>
+            <!-- Dashboard Content -->
+            <div id="dashboard" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Total Revenue</div>
+                            <div class="card-icon" style="background: var(--primary);">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">$24,580</div>
+                        <div class="card-growth">+12.5% from last month</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Students</div>
+                            <div class="card-icon" style="background: var(--success);">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">1,248</div>
+                        <div class="card-growth">+8.2% from last month</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Courses</div>
+                            <div class="card-icon" style="background: var(--warning);">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">86</div>
+                        <div class="card-growth">+3.6% from last month</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Completion Rate</div>
+                            <div class="card-icon" style="background: var(--info);">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">78%</div>
+                        <div class="card-growth">+5.3% from last month</div>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Revenue Overview</div>
+                        <div class="chart-actions">
+                            <select id="chart-period">
+                                <option>Last 7 Days</option>
+                                <option selected>Last 30 Days</option>
+                                <option>Last 90 Days</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart" id="revenue-chart">
+                        <!-- Chart bars will be generated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Recent Payments Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="chart-title">Recent Payments</div>
+                        <button class="btn btn-primary">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Course</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-table">
+                            <!-- Payment data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payments Content -->
+            <div id="payments" class="content-section">
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="chart-title">Payment History</div>
+                        <div>
+                            <input type="text" placeholder="Search payments..." style="width: 200px; margin-right: 10px;">
+                            <button class="btn btn-primary">Export</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Student Name</th>
+                                <th>Course</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-payments-table">
+                            <!-- All payment data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Courses Content -->
+            <div id="courses" class="content-section">
+                <div class="tabs">
+                    <div class="tab active" data-tab="courses-list">All Courses</div>
+                    <div class="tab" data-tab="add-course">Add New Course</div>
+                </div>
+
+                <div id="courses-list" class="tab-content active">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="chart-title">Course Management</div>
+                            <button class="btn btn-primary" id="add-course-btn">Add Course</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Course Name</th>
+                                    <th>Category</th>
+                                    <th>Students</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courses-table">
+                                <!-- Course data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-course" class="tab-content">
+                    <div class="form-container">
+                        <div class="form-title">Add New Course</div>
+                        <form id="course-form">
+                            <div class="form-group">
+                                <label for="course-name">Course Name</label>
+                                <input type="text" id="course-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="course-category">Category</label>
+                                <select id="course-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="data-science">Data Science</option>
+                                    <option value="digital-marketing">Digital Marketing</option>
+                                    <option value="business">Business</option>
+                                    <option value="design">Design</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="course-description">Description</label>
+                                <textarea id="course-description" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="course-price">Price ($)</label>
+                                <input type="number" id="course-price" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="course-duration">Duration (weeks)</label>
+                                <input type="number" id="course-duration" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="course-image">Course Image URL</label>
+                                <input type="url" id="course-image">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Course</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HR Content -->
+            <div id="hr" class="content-section">
+                <div class="tabs">
+                    <div class="tab active" data-tab="hr-list">HR Staff</div>
+                    <div class="tab" data-tab="add-hr">Add HR Staff</div>
+                </div>
+
+                <div id="hr-list" class="tab-content active">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="chart-title">HR Management</div>
+                            <button class="btn btn-primary" id="add-hr-btn">Add HR Staff</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hr-table">
+                                <!-- HR data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-hr" class="tab-content">
+                    <div class="form-container">
+                        <div class="form-title">Add HR Staff</div>
+                        <form id="hr-form">
+                            <div class="form-group">
+                                <label for="hr-name">Full Name</label>
+                                <input type="text" id="hr-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hr-email">Email</label>
+                                <input type="email" id="hr-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hr-department">Department</label>
+                                <select id="hr-department" required>
+                                    <option value="">Select Department</option>
+                                    <option value="recruitment">Recruitment</option>
+                                    <option value="training">Training</option>
+                                    <option value="operations">Operations</option>
+                                    <option value="support">Support</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hr-role">Role</label>
+                                <select id="hr-role" required>
+                                    <option value="">Select Role</option>
+                                    <option value="manager">Manager</option>
+                                    <option value="specialist">Specialist</option>
+                                    <option value="coordinator">Coordinator</option>
+                                    <option value="assistant">Assistant</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hr-password">Password</label>
+                                <input type="password" id="hr-password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add HR Staff</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainers Content -->
+            <div id="trainers" class="content-section">
+                <div class="tabs">
+                    <div class="tab active" data-tab="trainers-list">All Trainers</div>
+                    <div class="tab" data-tab="add-trainer">Add New Trainer</div>
+                </div>
+
+                <div id="trainers-list" class="tab-content active">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="chart-title">Trainer Management</div>
+                            <button class="btn btn-primary" id="add-trainer-btn">Add Trainer</button>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Specialization</th>
+                                    <th>Courses</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trainers-table">
+                                <!-- Trainer data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-trainer" class="tab-content">
+                    <div class="form-container">
+                        <div class="form-title">Add New Trainer</div>
+                        <form id="trainer-form">
+                            <div class="form-group">
+                                <label for="trainer-name">Full Name</label>
+                                <input type="text" id="trainer-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="trainer-email">Email</label>
+                                <input type="email" id="trainer-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="trainer-specialization">Specialization</label>
+                                <select id="trainer-specialization" required>
+                                    <option value="">Select Specialization</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="data-science">Data Science</option>
+                                    <option value="digital-marketing">Digital Marketing</option>
+                                    <option value="business">Business</option>
+                                    <option value="design">Design</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="trainer-experience">Experience (years)</label>
+                                <input type="number" id="trainer-experience" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="trainer-bio">Bio</label>
+                                <textarea id="trainer-bio" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="trainer-password">Password</label>
+                                <input type="password" id="trainer-password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Trainer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Content -->
+            <div id="settings" class="content-section">
+                <div class="form-container">
+                    <div class="form-title">System Settings</div>
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label for="system-name">System Name</label>
+                            <input type="text" id="system-name" value="LMS Admin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-email">Admin Email</label>
+                            <input type="email" id="admin-email" value="admin@lms.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency" required>
+                                <option value="USD" selected>US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                                <option value="GBP">British Pound (£)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timezone">Timezone</label>
+                            <select id="timezone" required>
+                                <option value="utc-5" selected>UTC-5 (Eastern Time)</option>
+                                <option value="utc-6">UTC-6 (Central Time)</option>
+                                <option value="utc-7">UTC-7 (Mountain Time)</option>
+                                <option value="utc-8">UTC-8 (Pacific Time)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notifications">
+                                <input type="checkbox" id="notifications" checked> Enable Email Notifications
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance">
+                                <input type="checkbox" id="maintenance"> Maintenance Mode
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="/Admin/script.js"></script>
+    <script>
+        // Load sidebar dynamically
+        fetch('/Admin/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading sidebar:', error));
+    </script>
+    <script src="js/script.js"></script>
+
 </body>
 </html>

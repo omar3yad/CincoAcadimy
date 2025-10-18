@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinco Academy - Student Dashboard</title>
+    <link rel="stylesheet" href="student.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <h1><i class="fas fa-graduation-cap"></i> Cinco Academy</h1>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-icons">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="profile">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Student Profile">
+                        <span id="student-name">Student Name</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item active">
+                    <a href="#">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-book"></i>
+                        <span>My Courses</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/Students/html/payments.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-card">
+                    <h1 id="welcome-text">Welcome back!</h1>
+                    <p>You're making great progress in your learning journey. Keep it up!</p>
+                    <div class="progress-summary">
+                        <div class="progress-item">
+                            <span class="progress-value" id="overall-progress">0%</span>
+                            <span class="progress-label">Overall Progress</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-value" id="active-courses">0</span>
+                            <span class="progress-label">Active Courses</span>
+                        </div>
+                        <div class="progress-item">
+                            <span class="progress-value" id="completed-lessons">0</span>
+                            <span class="progress-label">Completed Lessons</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <script>
+                async function loadStudentDashboard() {
+                    try {
+                        // Get student name & ID from localStorage (example: set after login)
+                        const studentName = localStorage.getItem("studentName") || "Student";
+                        const studentId = localStorage.getItem("studentId") || 8; // default for testing
+
+                        // Personalize welcome text
+                        document.getElementById("welcome-text").textContent = `Welcome back, ${studentName}!`;
+
+                        // Fetch dashboard data from backend
+                        const response = await fetch(`https://localhost:44380/api/Account/dashboard/${studentId}`);
+                        if (!response.ok) throw new Error("Failed to fetch dashboard data");
+
+                        const data = await response.json();
+
+                        // Update page content
+                        document.querySelector(".welcome-card p").textContent = data.message;
+                        document.getElementById("overall-progress").textContent = `${data.overallProgress}%`;
+                        document.getElementById("active-courses").textContent = data.activeCourses;
+                        document.getElementById("completed-lessons").textContent = data.completedLessons;
+                    }
+                    catch (error) {
+                        console.error("Error loading dashboard:", error);
+                    }
+                }
+
+                // Run when page loads
+                loadStudentDashboard();
+            </script>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading your courses...</p>
+            </div>
+
+            <!-- Continue Learning Section -->
+            <section class="continue-learning" id="continue-learning" style="display: none;">
+                <h2>Continue Learning</h2>
+                <div id="continue-card" class="continue-card">
+                    <!-- Continue learning content will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- My Courses Section -->
+            <section class="my-courses" id="my-courses" style="display: none;">
+                <h2>My Courses</h2>
+                <div id="courses-grid" class="courses-grid">
+                    <!-- Course cards will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Error State -->
+            <div id="error-state" class="error-state" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Unable to Load Courses</h3>
+                <p>There was a problem loading your course data. Please try again later.</p>
+                <button id="retry-btn" class="btn-primary">Retry</button>
+            </div>
+
+            <!-- Recommended Courses Section -->
+            <section class="recommended-courses">
+                <br>
+                <h2>Recommended Courses</h2>
+                <div class="courses-grid" id="recommended-courses">
+                    <!-- Courses will be loaded here dynamically -->
+                </div>
+            </section>
+
+            <script>
+                async function loadRecommendedCourses() {
+                    try {
+                        // Get the student ID from localStorage (or use a fallback)
+                        const studentId = localStorage.getItem("studentId") || 8;
+                        const response = await fetch(`https://localhost:44380/api/Course/student/${studentId}`);
+
+                        if (!response.ok) throw new Error("Failed to fetch courses");
+
+                        const courses = await response.json();
+                        const container = document.getElementById("recommended-courses");
+                        container.innerHTML = "";
+
+                        // Filter only not-enrolled courses (recommended ones)
+                        const recommendedCourses = courses.filter(c => !c.isEnrolled);
+
+                        // Generate course cards
+                        recommendedCourses.forEach(course => {
+                            const card = document.createElement("div");
+                            card.classList.add("course-card");
+
+                            card.innerHTML = `
+                                  <div class="course-image">
+                                    <img src="${course.imageUrl}" alt="${course.title}">
+                                  </div>
+                                  <div class="course-content">
+                                    <h3>${course.title}</h3>
+                                    <p>${course.description}</p>
+                                    <div class="course-footer">
+                                      <span class="course-price">${course.price > 0 ? `$${course.price}` : "Free"}</span>
+                                      <button class="btn-secondary" onclick="viewCourse(${course.id})">Enroll</button>
+                                    </div>
+                                  </div>
+                                `;
+                            container.appendChild(card);
+                        });
+
+                        // If no recommended courses
+                        if (recommendedCourses.length === 0) {
+                            container.innerHTML = "<p>No recommended courses available right now.</p>";
+                        }
+
+                    } catch (error) {
+                        console.error("Error loading courses:", error);
+                    }
+                }
+
+                // Example View Course handler
+                function viewCourse(courseId) {
+                    window.location.href = `https://localhost:44380/Students/html/paymentNow.html?courseId=${courseId}`;
+                }
+
+
+                // Load on page start
+                loadRecommendedCourses();
+            </script>
+
+        </main>
+    </div>
+
+    <script src="student.js"></script>
+    <script>
+        // Get the name stored in localStorage
+        const studentName = localStorage.getItem("studentName");
+
+        // Select the span element
+        const nameElement = document.getElementById("student-name");
+        const welcomeText = document.getElementById("welcome-text");
+
+
+        // If name exists in localStorage, display it; otherwise, show a default
+        if (studentName) {
+            nameElement.textContent = studentName;
+            welcomeText.textContent = `Welcome back, ${studentName}!`;
+
+        } else {
+            nameElement.textContent = "Guest";
+            welcomeText.textContent = "Welcome back, Student!";
+
+        }
+    </script>
+</body>
+</html>

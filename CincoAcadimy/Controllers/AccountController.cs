@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using CincoAcadimy.Service;
 using CincoAcadimy.DTOs;
+using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Controllers
 {
@@ -69,5 +69,25 @@ namespace CincoAcadimy.Controllers
             return Ok(result);
         }
 
+        [HttpGet("instructor")]
+        public async Task<IActionResult> GetAll()
+        {
+            var instructors = await _authService.GetAllInstructorsAsync();
+
+            if (instructors == null || instructors.Count == 0)
+                return NotFound(new { message = "No instructors found" });
+
+            return Ok(instructors);
+        }
+
+        [HttpGet("dashboard/{studentId}")]
+        public async Task<IActionResult> GetDashboard(int studentId)
+        {
+            var result = await _authService.GetDashboardAsync(studentId);
+            return Ok(result);
+        }
+
+
+
     }
-    }
+}

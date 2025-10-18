@@ -1,5 +1,5 @@
 ﻿using CincoAcadimy.Models;
-using CincoAcadimy.Models;
+using CincoAcadimy.Repository.@interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 

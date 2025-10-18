@@ -1,6 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Repository;
+using CincoAcadimy.Repository.@interface;
+using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Service
 {
@@ -127,9 +128,40 @@ namespace CincoAcadimy.Service
             {
                 Id = s.Id,
                 Name = s.Name,
+                Description = s.Description,
+                VideoUrl = s.VideoUrl,
+                IsCompleted = s.StudentSessions
+                              .FirstOrDefault()?.IsCompleted ?? false,
+
+                Resources = s.Resources.Select(r => new ResourceDto
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Url = r.Url,
+                    FileType = r.FileType,
+                    IsDownloadable = r.IsDownloadable
+                }).ToList()?? new List<ResourceDto>()
+
             });
         }
 
+        public async Task<StudentSessionAttendanceDto> GetStudentSessionAttendanceAsync(int sessionId, int studentId)
+        {
+            var studentSession = await _repository.GetStudentSessionAttendanceAsync(sessionId, studentId);
+            if (studentSession == null)
+                return null;
 
+            return new StudentSessionAttendanceDto
+            {
+                StudentId = studentSession.StudentId,
+                SessionId = studentSession.SessionId,
+                IsCompleted = studentSession.IsCompleted
+            };
+        }
+        public async Task<bool> UpdateCompletionAsync(int sessionId, int studentId, bool isCompleted)
+        {
+            // Add business logic here if needed
+            return await _repository.UpdateCompletionAsync(sessionId, studentId, isCompleted);
+        }
     }
 }

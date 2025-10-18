@@ -1,6 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Repositories;
+using CincoAcadimy.Repository.@interface;
+using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -132,6 +133,23 @@ namespace CincoAcadimy.Service
 
             return string.Join(" | ", result.Errors.Select(e => e.Description));
         }
+        public async Task<List<InstructorDto>> GetAllInstructorsAsync()
+        {
+            var instructors = await _userRoleRepository.GetAllAsync();
 
+            return instructors.Select(i => new InstructorDto
+            {
+                Id = i.Id,
+                Name = i.User?.FullName ?? "Unknown",
+                Email = i.User?.Email ?? "N/A",
+                Phone = i.User.PhoneNumber,
+                Specialization = i.Specialization,
+                CoursesCount = i.Courses?.Count ?? 0
+            }).ToList();
+        }
+        public async Task<StudentDashboardDto> GetDashboardAsync(int studentId)
+        {
+            return await _userRoleRepository.GetDashboardDataAsync(studentId);
+        }
     }
 }

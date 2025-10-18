@@ -5,12 +5,15 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#0A2E5D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
         </button>
     </div>
-    <nav style="display:flex;flex-direction:column;gap:8px" aria-label="Quick Links">
-        <a href="#">📚 My Courses</a>
-        <a href="#">📊 My Grades</a>
-        <a href="#">📆 Calendar</a>
-        <a href="#">💬 Support</a>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <nav style="display:flex;flex-direction:column;gap:12px" aria-label="Quick Links" class="quick-links">
+        <a href="#"><i class="fas fa-book"></i> My Courses</a>
+        <a href="#"><i class="fas fa-chart-bar"></i> My Grades</a>
+        <a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a>
+        <a href="#"><i class="fas fa-headset"></i> Support</a>
     </nav>
+
 
     <hr style="margin:14px 0;border:none;border-top:1px solid #eef2f6">
     <div style="font-size:13px;color:var(--muted)">
@@ -20,3 +23,30 @@
         </div>
     </div>
 </aside>
+
+<style>
+    .quick-links a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #081933;
+        font-size: 15px;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+    }
+
+        .quick-links a i {
+            font-size: 16px;
+            color: #f25826;
+            width: 20px;
+            text-align: center;
+        }
+
+        .quick-links a:hover {
+            background: #f2582615;
+            color: #f25826;
+        }
+</style>

@@ -10,38 +10,110 @@
 
 </head>
 
-    <header class="navbar" role="banner">
-        <div style="display:flex;align-items:center">
-            <div class="brand">
-                <div class="logo">
-                    <div class="logo-mark" aria-hidden="true">CA</div>
-                    <div>
-                        <div class="title">Cinco<span style="color:var(--logo-orange)">Academy</span></div>
-                        <div style="font-size:12px;color:var(--muted)">Learn. Grow. Succeed.</div>
-                    </div>
+<header class="navbar" role="banner">
+    <div style="display:flex;align-items:center">
+        <div class="brand">
+            <div class="logo">
+                <div class="logo-mark" aria-hidden="true">CA</div>
+                <div>
+                    <div class="title">Cinco<span style="color:var(--logo-orange)">Academy</span></div>
+                    <div style="font-size:12px;color:var(--muted)">Learn. Grow. Succeed.</div>
                 </div>
-                <nav class="nav-links" aria-label="Main Navigation">
-                    <a href="https://localhost:44380/Student/html/index.html" class="active">Dashboard</a>
-                    <a href="#">Courses</a>
-                    <a href="#">Assignments</a>
-                    <a href="#">Grades</a>
-                    <a href="#">Messages</a>
-                    <a href="#">Profile</a>
-                </nav>
             </div>
-        </div>
+            <nav class="nav-links" aria-label="Main Navigation">
+                <a href="https://localhost:44380/Student/html/index.html">Dashboard</a>
+                <a href="https://localhost:44380/Student/html/Courses.html">Courses</a>
+                <a href="https://localhost:44380/Student/html/Assignments.html">Assignments</a>
+                <a href="https://localhost:44380/Student/html/Grades.html">Grades</a>
+                <a href="https://localhost:44380/Student/html/Messages.html">Messages</a>
+                <a href="https://localhost:44380/Student/html/Profile.html">Profile</a>
+            </nav>
 
-        <div class="nav-actions" role="navigation" aria-label="User Navigation">
-            <button class="icon-btn notif" aria-label="Notifications">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 10-3 0v.68C7.64 5.36 6 7.929 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5" stroke="#0A2E5D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <span class="badge" aria-hidden="true">3</span>
-            </button>
-            <div class="profile">
-                <div style="text-align:right;margin-right:8px">
-                    <div style="font-weight:700">Ahmed</div>
-                    <div style="font-size:12px;color:var(--muted)">Level 2 Student</div>
-                </div>
-                <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcdef" alt="Ahmed profile picture">
-            </div>
+            <style>
+                .nav-links a.active {
+                    color: #f25826;
+                    font-weight: 700;
+                    border-bottom: 2px solid #f25826;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const menuItems = document.querySelectorAll('.nav-links a');
+
+                    // normalize: remove trailing slash and treat /index.html same as /folder
+                    const normalizePath = (pathname) => {
+                        if (!pathname) return '/';
+                        // remove query/hash already (we pass only pathname)
+                        let p = pathname.replace(/\/index\.(html?|htm)$/i, ''); // remove index.html
+                        p = p.replace(/\/+$/, ''); // remove trailing slash(es)
+                        if (p === '') p = '/';
+                        return p.toLowerCase(); // case-insensitive compare
+                    };
+
+                    const currentUrl = new URL(window.location.href);
+                    const currentPath = normalizePath(currentUrl.pathname);
+
+                    // remove any stale active classes first
+                    document.querySelectorAll('.nav-links a.active').forEach(a => a.classList.remove('active'));
+
+                    menuItems.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (!href) return;
+
+                        // anchor-only links (like "#section") → match by hash
+                        if (href.startsWith('#')) {
+                            if (window.location.hash === href) link.classList.add('active');
+                            return;
+                        }
+
+                        // resolve relative href against current page
+                        let linkUrl;
+                        try {
+                            linkUrl = new URL(href, window.location.href);
+                        } catch (e) {
+                            // if URL fails to parse, skip
+                            return;
+                        }
+
+                        const linkPath = normalizePath(linkUrl.pathname);
+
+                        // match exact normalized path OR last-segment match (safer for partial pages)
+                        if (linkPath === currentPath) {
+                            link.classList.add('active');
+                        } else {
+                            // also allow case when nav uses "index.html" omitted:
+                            // e.g. linkPath = "/Student/html" and currentPath = "/Student/html/index.html" (normalized equals)
+                            // already handled by normalizePath, but keep fallback: match last segment
+                            const currLast = currentPath.split('/').pop();
+                            const linkLast = linkPath.split('/').pop();
+                            if (currLast && linkLast && currLast === linkLast) {
+                                link.classList.add('active');
+                            }
+                        }
+                    });
+
+                    // DEBUG: افتح الكونسول لو لسه مش شغال، شغّل السطور دي لترى القيم:
+                    // console.log('currentPath =', currentPath);
+                    // document.querySelectorAll('.nav-links a').forEach(a => console.log(a.getAttribute('href'), '->', new URL(a.getAttribute('href'), location.href).pathname));
+                });
+            </script>
+
+
+
         </div>
-    </header>
+    </div>
+    <div class="nav-actions" role="navigation" aria-label="User Navigation">
+        <button class="icon-btn notif" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 10-3 0v.68C7.64 5.36 6 7.929 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5" stroke="#0A2E5D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="badge" aria-hidden="true">3</span>
+        </button>
+        <div class="profile">
+            <div style="text-align:right;margin-right:8px">
+                <div style="font-weight:700">Ahmed</div>
+                <div style="font-size:12px;color:var(--muted)">Level 2 Student</div>
+            </div>
+            <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcdef" alt="Ahmed profile picture">
+        </div>
+    </div>
+</header>

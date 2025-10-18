@@ -1,0 +1,115 @@
+﻿    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Admin Dashboard</title>
+    <link rel="stylesheet" href="/Admin/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+    <div id="sidebar-container" class="sidebar"></div>
+    <script>
+        fetch('/Admin/sidebar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('sidebar-container').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading sidebar:', error));
+    </script>  
+    <!-- Courses Content -->
+                <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Payments</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Admin User">
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Administrator</div>
+                    </div>
+                </div>
+            </div>
+            <div id="courses" class="content-section">
+                <div class="tabs">
+                    <div class="tab active" data-tab="courses-list">All Courses</div>
+                    <div class="tab" data-tab="add-course">Add New Course</div>
+                </div>
+
+                <div id="courses-list" class="tab-content active">
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="chart-title">Course Management</div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Course Name</th>
+                                    <th>Istructor Name</th>
+                                    <th>Price</th>
+                                    <th>Duration</th>
+                                    <th>Students</th>
+                                    <th>Sessions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courses-table">
+                                <!-- Course data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="add-course" class="tab-content">
+                    <div class="form-container">
+                        <div class="form-title">Add New Course</div>
+                        <form id="course-form">
+                            <div class="form-group">
+                                <label for="course-title">Course Title</label>
+                                <input type="text" id="course-title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="course-description">Description</label>
+                                <textarea id="course-description" rows="4" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="course-image">Course Image URL</label>
+                                <input type="url" id="course-image" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="course-duration">Duration</label>
+                                <input type="text" id="course-duration" placeholder="e.g., 8 hours / 4 weeks" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="course-price">Price ($)</label>
+                                <input type="number" id="course-price" min="0" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="instructor-id">Select Instructor</label>
+                                <select id="instructor-id" required>
+                                    <option value="">Loading instructors...</option>
+                                </select>
+                            </div>
+
+                            <div id="response-message" style="margin-top:10px; font-weight:bold;"></div>
+
+
+                            <button type="submit" class="btn btn-primary">Add Course</button>
+                        </form>
+
+                        <div id="response-message" style="margin-top:15px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/courses.js"></script>
+</body>
+</html>

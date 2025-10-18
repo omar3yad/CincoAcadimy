@@ -1,7 +1,9 @@
 using CincoAcadimy.Models;
 using CincoAcadimy.Repositories;
 using CincoAcadimy.Repository;
+using CincoAcadimy.Repository.@interface;
 using CincoAcadimy.Service;
+using CincoAcadimy.Service.@interface;
 using CincoAcadimy.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -35,6 +37,8 @@ builder.Services.AddScoped<IAssessmentService, AssessmentService>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -130,7 +134,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+app.UseStaticFiles(); // Make sure this is present
 
 app.UseRouting();
 
@@ -147,3 +151,6 @@ app.MapGet("/", context =>
 });
 
 app.Run();
+
+// Add-Migration AddPayment
+// Update-Database

@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Management - LMS Admin Dashboard</title>
+    <link rel="stylesheet" href="/Admin/css/style.css">
+    <link rel="stylesheet" href="css/hr.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="sidebar-container" class="sidebar"></div>
+        <script>
+            fetch('/Admin/sidebar.html')
+                .then(r => r.text())
+                .then(data => document.getElementById('sidebar-container').innerHTML = data)
+                .catch(console.error);
+        </script>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>HR Management</h1>
+                <div class="user-info">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Admin User">
+                    <div>
+                        <div>Admin User</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">Administrator</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hr" class="content-section active">
+                <div class="content-header">
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="search-input" placeholder="Search by name or department...">
+                        </div>
+                        <button id="add-hr-btn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add HR Staff
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-body">
+                    <div class="table-container">
+                        <table id="hr-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hr-table-body">
+                                <!-- HR staff data will be loaded here -->
+                            </tbody>
+                        </table>
+                        <div id="loading-indicator" class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Loading HR staff...
+                        </div>
+                        <div id="no-results" class="no-results" style="display: none;">
+                            <i class="fas fa-search"></i>
+                            <p>No HR staff found matching your criteria.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add/Edit HR Staff -->
+    <div id="hr-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add HR Staff</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="hr-form">
+                    <input type="hidden" id="hr-id">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department *</label>
+                        <select id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Human Resources">Human Resources</option>
+                            <option value="Recruitment">Recruitment</option>
+                            <option value="Training & Development">Training & Development</option>
+                            <option value="Compensation & Benefits">Compensation & Benefits</option>
+                            <option value="Employee Relations">Employee Relations</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position *</label>
+                        <input type="text" id="position" name="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-btn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" id="save-btn" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <script src="js/hr.js"></script>
+</body>
+</html>
