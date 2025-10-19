@@ -1,9 +1,10 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Service.@interface;
+using CincoAcadimy.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Controllers
 {
@@ -110,6 +111,17 @@ namespace CincoAcadimy.Controllers
                 return NotFound("StudentCourse not found.");
 
             return Ok("Enrollment status updated successfully.");
+        }
+
+        [HttpGet("instructor/{instructorId}")]
+        public async Task<IActionResult> GetInstructorCourses(int instructorId)
+        {
+            var courses = await _service.GetInstructorCoursesAsync(instructorId);
+
+            if (courses == null || !courses.Any())
+                return NotFound(new { Message = "No courses found for this instructor." });
+
+            return Ok(courses);
         }
     }
 }

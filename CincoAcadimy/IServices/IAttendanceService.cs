@@ -1,6 +1,6 @@
 ﻿using CincoAcadimy.DTOs;
 
-namespace CincoAcadimy.Service.@interface
+namespace CincoAcadimy.IServices
 {
     public interface IAttendanceService
     {

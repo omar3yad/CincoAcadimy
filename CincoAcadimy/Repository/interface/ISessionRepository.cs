@@ -16,5 +16,8 @@ namespace CincoAcadimy.Repository.@interface
         Task<bool> UpdateCompletionAsync(int sessionId, int studentId, bool isCompleted);
 
         Task<StudentSession> GetStudentSessionAttendanceAsync(int sessionId, int studentId);
+        Task<Resource> AddAsync(Resource resource);
+
+
     }
 }

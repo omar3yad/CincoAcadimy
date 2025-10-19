@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 
-namespace CincoAcadimy.Service.@interface
+namespace CincoAcadimy.IServices
 {
     public interface IAssessmentService
     {

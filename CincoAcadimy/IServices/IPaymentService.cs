@@ -2,7 +2,7 @@ using CincoAcadimy.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CincoAcadimy.Service.@interface
+namespace CincoAcadimy.IServices
 {
     public interface IPaymentService
     {

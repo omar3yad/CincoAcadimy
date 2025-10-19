@@ -1,16 +1,17 @@
-using CincoAcadimy.Models;
-using CincoAcadimy.Repositories;
-using CincoAcadimy.Repository;
-using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service;
-using CincoAcadimy.Service.@interface;
-using CincoAcadimy.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
+using CincoAcadimy.Models;
+using CincoAcadimy.Service;
+using CincoAcadimy.Services;
+using CincoAcadimy.IServices;
+using CincoAcadimy.Repository;
+using Microsoft.OpenApi.Models;
+using CincoAcadimy.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using CincoAcadimy.Repository.@interface;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using IResourceService = CincoAcadimy.IServices.IResourceService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,11 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
+
+
+builder.Services.AddScoped<IResourceService, ResourceService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

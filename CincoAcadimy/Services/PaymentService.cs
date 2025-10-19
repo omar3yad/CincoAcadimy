@@ -1,11 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Repository;
 using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service.@interface;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Service
 {

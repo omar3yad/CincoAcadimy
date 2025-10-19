@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 
-namespace CincoAcadimy.Service.@interface
+namespace CincoAcadimy.IServices
 {
     public interface ICourseService
     {
@@ -19,5 +19,7 @@ namespace CincoAcadimy.Service.@interface
         Task<IEnumerable<AllCourseDto>> GetAllCoursesForStudentAsync(int studentId);
         Task<AllCourseDto?> GetCourseForStudentAsync(int courseId, int studentId);
         Task<bool> UpdateEnrollmentStatusAsync(UpdateEnrollmentStatusDto dto);
+        Task<IEnumerable<Course>> GetInstructorCoursesAsync(int instructorId);
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
-using CincoAcadimy.Service.@interface;
-using Microsoft.AspNetCore.Http;
+using CincoAcadimy.Models;
 using Microsoft.AspNetCore.Mvc;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Controllers
 {
@@ -95,5 +95,14 @@ namespace CincoAcadimy.Controllers
             return BadRequest(new { Message = "Failed to update or create completion record." });
         }
 
+        [HttpPost("add/Resource")]
+        public async Task<IActionResult> Add([FromBody] AddResourceDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _service.AddAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service.@interface;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Service
 {
@@ -50,8 +50,10 @@ namespace CincoAcadimy.Service
                 {
                     Id = r.Id,
                     Title = r.Title,
+                    Description = r.Description,
                     Url = r.Url,
                     FileType = r.FileType,
+                    SessionId = r.SessionId,    
                     IsDownloadable = r.IsDownloadable
                 }).ToList()
             };
@@ -62,6 +64,9 @@ namespace CincoAcadimy.Service
             var session = new Session
             {
                 Name = dto.Title,
+                Description = dto.Description,
+                VideoUrl = "https://localhost:44380/HR/html/session.html",
+
                 CourseId = dto.CourseId
             };
 
@@ -163,5 +168,22 @@ namespace CincoAcadimy.Service
             // Add business logic here if needed
             return await _repository.UpdateCompletionAsync(sessionId, studentId, isCompleted);
         }
+
+        public async Task<Resource> AddAsync(AddResourceDto dto)
+        {
+            var resource = new Resource
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                Url = dto.Url,
+                FileType = dto.FileType,
+                SessionId = dto.SessionId,
+                UploadedAt = DateTime.UtcNow,
+                IsDownloadable = dto.IsDownloadable
+            };
+
+            return await _repository.AddAsync(resource);
+        }
+
     }
 }

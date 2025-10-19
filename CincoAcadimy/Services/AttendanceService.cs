@@ -1,7 +1,8 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
+using CincoAcadimy.IServices;
+
 using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Services
 {

@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using CincoAcadimy.IServices;
+
 using CincoAcadimy.DTOs;
-using CincoAcadimy.Service.@interface;
 
 namespace CincoAcadimy.Controllers
 {

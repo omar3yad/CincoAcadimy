@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CincoAcadimy.Repository.@interface
 {
-    public class CourseRepository: ICourseRepository
+    public class CourseRepository : ICourseRepository
     {
         private readonly ApplicationDbContext _context;
         public CourseRepository(ApplicationDbContext context)
@@ -147,6 +147,13 @@ namespace CincoAcadimy.Repository.@interface
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<Course>> GetInstructorCoursesAsync(int instructorId)
+        {
+            return await _context.Courses
+                .Where(c => c.InstructorId == instructorId)
+                .ToListAsync();
         }
     }
 }

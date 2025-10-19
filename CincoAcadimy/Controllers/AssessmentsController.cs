@@ -1,8 +1,9 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
-using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CincoAcadimy.IServices;
+
 
 namespace CincoAcadimy.Controllers
 {

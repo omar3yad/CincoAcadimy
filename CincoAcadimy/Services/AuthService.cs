@@ -1,13 +1,14 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CincoAcadimy.IServices;
+
 
 namespace CincoAcadimy.Service
 {
@@ -31,6 +32,7 @@ namespace CincoAcadimy.Service
             var user = new ApplicationUser
             {
                 UserName = model.UserName,
+                FullName = model.UserName,
                 Email = model.Email,
             };
             try

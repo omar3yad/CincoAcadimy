@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resource Management - CincoAcademy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/attendance.css">
+    <link rel="stylesheet" href="../css/assessment.css">
+    <style>
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn:hover {
+                background-color: #2980b9;
+            }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+            .btn-danger:hover {
+                background-color: #c0392b;
+            }
+
+        .table-section {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Sidebar Navigation">
+            <div class="sidebar-header">
+                <img src="/uploads/logo-Photoroom.png" alt="HR Logo" class="logo" />
+                <span class="sidebar-title">CincoAcademy HR</span>
+                <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                    <li><a href="attendance.html"><i class="fas fa-user-check"></i> <span>Attendance</span></a></li>
+                    <li><a href="assessment.html"><i class="fas fa-tasks"></i> <span>Assignments</span></a></li>
+                    <li><a href="session.html"><i class="fas fa-chalkboard-teacher"></i> <span>Sessions</span></a></li>
+                    <li class="active"><a href="resource.html"><i class="fas fa-book-open"></i> <span>Resources</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-graduate"></i> <span>Students</span></a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> <span>Reports</span></a></li>
+                    <li><a href="#"><i class="fas fa-sliders-h"></i> <span>Settings</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-left">
+                    <img src="../img/hr-logo.png" alt="HR Logo" class="logo-small" />
+                </div>
+                <div class="top-right">
+                    <button class="notification-btn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-dot" id="notifDot"></span>
+                    </button>
+                    <div class="profile-menu">
+                        <img src="../img/profile.png" alt="Profile" class="profile-icon" />
+                        <span class="profile-name">HR Admin</span>
+                        <button class="profile-dropdown-btn" aria-label="Profile Menu">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="profile-dropdown" id="profileDropdown" aria-label="Profile Dropdown" hidden>
+                            <a href="#">Settings</a>
+                            <a href="#">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <h1>Resource Management</h1>
+
+            <!-- Add Resource Form -->
+            <section class="card">
+                <form id="resourceForm" autocomplete="off" style="width: -webkit-fill-available;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Resource Title <span class="required">*</span></label>
+                            <input type="text" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="courseSelect">Course <span class="required">*</span></label>
+                            <select id="courseSelect" required>
+                                <option value="">Select Course</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sessionSelect">Session <span class="required">*</span></label>
+                            <select id="sessionSelect" required disabled>
+                                <option value="">Select Session</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="url">Resource URL <span class="required">*</span></label>
+                            <input type="url" id="url" placeholder="https://example.com/resource" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileType">File Type <span class="required">*</span></label>
+                            <select id="fileType" required>
+                                <option value="">Select Type</option>
+                                <option value="pdf">PDF</option>
+                                <option value="video">Video</option>
+                                <option value="image">Image</option>
+                                <option value="document">Document</option>
+                                <option value="presentation">Presentation</option>
+                                <option value="spreadsheet">Spreadsheet</option>
+                                <option value="archive">Archive</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <style>
+                        .form-row {
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            padding: 10px 0;
+                        }
+
+                        .form-group {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            gap: 10px;
+                            font-family: "Poppins", sans-serif;
+                            font-size: 15px;
+                            color: #222;
+                            cursor: pointer;
+                            user-select: none;
+                        }
+
+                            /* Checkbox modern style */
+                            .form-group input[type="checkbox"] {
+                                appearance: none;
+                                width: 22px;
+                                height: 22px;
+                                border: 2px solid #555;
+                                border-radius: 6px;
+                                display: inline-block;
+                                position: relative;
+                                transition: all 0.3s ease;
+                                cursor: pointer;
+                            }
+
+                                .form-group input[type="checkbox"]:checked {
+                                    background-color: #4a90e2;
+                                    border-color: #4a90e2;
+                                }
+
+                                    .form-group input[type="checkbox"]:checked::after {
+                                        content: "✔";
+                                        position: absolute;
+                                        top: 1px;
+                                        left: 4px;
+                                        color: white;
+                                        font-size: 14px;
+                                        font-weight: bold;
+                                    }
+                    </style>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="checkbox" id="isDownloadable" checked>
+                            <label for="isDownloadable">Allow Download</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Add Resource</button>
+                </form>
+            </section>
+
+            <!-- Resources Table -->
+            <section class="table-section">
+                <h2>Resources</h2>
+                <table id="resourceTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>URL</th>
+                            <th>File Type</th>
+                            <th>Uploaded At</th>
+                            <th>Downloadable</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resourceTableBody">
+                        <tr>
+                            <td colspan="8">Please select a session to view resources</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const instructorId = localStorage.getItem("studentId") || 5; // مؤقتاً
+        const courseSelect = document.getElementById("courseSelect");
+        const sessionSelect = document.getElementById("sessionSelect");
+        const resourceTableBody = document.getElementById("resourceTableBody");
+
+        // APIs
+        const coursesApi = `https://localhost:44380/api/Course/instructor/${instructorId}`;
+        const sessionsApi = `https://localhost:44380/api/Session`;
+        const resourcesApi = `https://localhost:44380/api/Resources`;
+
+        // ✅ تحميل الكورسات الخاصة بالإنسترَكتور
+        async function loadCourses() {
+            try {
+                const res = await fetch(coursesApi);
+                const courses = await res.json();
+                courseSelect.innerHTML = `<option value="">Select Course</option>`;
+                courses.forEach(c => {
+                    const opt = document.createElement("option");
+                    opt.value = c.id;
+                    opt.textContent = c.title;
+                    courseSelect.appendChild(opt);
+                });
+            } catch (error) {
+                console.error("Error loading courses:", error);
+                alert("Failed to load courses.");
+            }
+        }
+
+        // ✅ تحميل الجلسات الخاصة بالكورس المختار
+        async function loadSessionsByCourse(courseId) {
+            try {
+                if (!courseId) {
+                    sessionSelect.innerHTML = `<option value="">Select Session</option>`;
+                    sessionSelect.disabled = true;
+                    resourceTableBody.innerHTML = `<tr><td colspan="8">Please select a course first</td></tr>`;
+                    return;
+                }
+
+                const res = await fetch(`${sessionsApi}/course/${courseId}`);
+                const sessions = await res.json();
+
+                sessionSelect.innerHTML = `<option value="">Select Session</option>`;
+                if (sessions.length === 0) {
+                    sessionSelect.disabled = true;
+                    resourceTableBody.innerHTML = `<tr><td colspan="8">No sessions found for this course</td></tr>`;
+                    return;
+                }
+
+                sessions.forEach(s => {
+                    const opt = document.createElement("option");
+                    opt.value = s.id;
+                    opt.textContent = s.name;
+                    sessionSelect.appendChild(opt);
+                });
+                sessionSelect.disabled = false;
+            } catch (error) {
+                console.error("Error loading sessions:", error);
+                alert("Failed to load sessions.");
+            }
+        }
+
+        // ✅ تحميل الموارد الخاصة بالجلسة المختارة
+        async function loadResourcesBySession(sessionId) {
+            try {
+                if (!sessionId) {
+                    resourceTableBody.innerHTML = `<tr><td colspan="8">Please select a session</td></tr>`;
+                    return;
+                }
+
+                const res = await fetch(`${resourcesApi}/session/${sessionId}`);
+                const resources = await res.json();
+
+                resourceTableBody.innerHTML = "";
+                if (resources.length === 0) {
+                    resourceTableBody.innerHTML = `<tr><td colspan="8">No resources found for this session</td></tr>`;
+                    return;
+                }
+
+                resources.forEach(r => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                            <td>${r.id}</td>
+                            <td>${r.title}</td>
+                            <td>${r.description || "—"}</td>
+                            <td><a href="${r.url}" target="_blank">View Resource</a></td>
+                            <td>${r.fileType}</td>
+                            <td>${new Date(r.uploadedAt).toLocaleDateString()}</td>
+                            <td>${r.isDownloadable ? 'Yes' : 'No'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteResource(${r.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        `;
+                    resourceTableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error loading resources:", error);
+                alert("Failed to load resources.");
+            }
+        }
+
+        // ✅ إضافة مورد جديد
+        document.getElementById("resourceForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById("title").value;
+            const description = document.getElementById("description").value;
+            const url = document.getElementById("url").value;
+            const fileType = document.getElementById("fileType").value;
+            const sessionId = document.getElementById("sessionSelect").value;
+            const isDownloadable = document.getElementById("isDownloadable").checked;
+
+            if (!sessionId) {
+                alert("Please select a session first!");
+                return;
+            }
+
+            try {
+                const res = await fetch(resourcesApi, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        url,
+                        fileType,
+                        sessionId: parseInt(sessionId),
+                        isDownloadable
+                    })
+                });
+
+                if (res.ok) {
+                    alert("Resource added successfully!");
+                    e.target.reset();
+                    loadResourcesBySession(sessionId);
+                } else {
+                    const errorText = await res.text();
+                    console.error("Error response:", errorText);
+                    alert("Failed to add resource.");
+                }
+            } catch (error) {
+                console.error("Error adding resource:", error);
+                alert("Failed to add resource.");
+            }
+        });
+
+        // ✅ حذف المورد
+        async function deleteResource(id) {
+            if (!confirm("Are you sure you want to delete this resource?")) return;
+
+            try {
+                const res = await fetch(`${resourcesApi}/${id}`, { method: "DELETE" });
+                if (res.ok) {
+                    alert("Resource deleted successfully!");
+                    loadResourcesBySession(sessionSelect.value);
+                } else {
+                    alert("Failed to delete resource.");
+                }
+            } catch (error) {
+                console.error("Error deleting resource:", error);
+                alert("Failed to delete resource.");
+            }
+        }
+
+        // ✅ عند اختيار كورس — تحميل الجلسات الخاصة به
+        courseSelect.addEventListener("change", (e) => {
+            const courseId = e.target.value;
+            loadSessionsByCourse(courseId);
+        });
+
+        // ✅ عند اختيار جلسة — تحميل الموارد الخاصة بها
+        sessionSelect.addEventListener("change", (e) => {
+            const sessionId = e.target.value;
+            loadResourcesBySession(sessionId);
+        });
+
+        // ✅ تحميل الكورسات عند فتح الصفحة
+        loadCourses();
+    </script>
+</body>
+</html>x

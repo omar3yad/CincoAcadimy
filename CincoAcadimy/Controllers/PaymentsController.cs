@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Service;
-using CincoAcadimy.Service.@interface;
 using Microsoft.AspNetCore.Mvc;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Controllers
 {

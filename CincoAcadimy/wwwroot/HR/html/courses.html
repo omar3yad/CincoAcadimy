@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #081933;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #f25826;
+            text-align: center;
+        }
+
+        .course-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .course-card {
+            background-color: #0d274d;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+            padding-bottom: 15px;
+            transition: transform 0.2s ease;
+        }
+
+            .course-card:hover {
+                transform: scale(1.02);
+            }
+
+            .course-card img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+            }
+
+            .course-card h3 {
+                color: #f25826;
+                margin: 10px;
+            }
+
+            .course-card p {
+                margin: 10px;
+            }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #f25826;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+            button:hover {
+                background-color: #ff6b3c;
+            }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+        }
+
+            .modal-content h2 {
+                color: #f25826;
+            }
+
+            .modal-content input, .modal-content textarea {
+                width: 100%;
+                margin: 5px 0;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+            }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-weight: bold;
+            color: #f25826;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Your Courses</h1>
+    <div class="course-container" id="courses"></div>
+
+    <!-- Modal Add Session -->
+    <div class="modal" id="sessionModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Session</h2>
+            <input type="text" id="sessionTitle" placeholder="Session Title" />
+            <textarea id="sessionDescription" placeholder="Session Description"></textarea>
+            <button onclick="addSession()">Add</button>
+        </div>
+    </div>
+
+    <script>
+        // حاول تجيب الـ ID من localStorage
+        const instructorId = localStorage.getItem("studentId");
+
+        // لو مفيش instructorId يبقى مفيش حد مسجل دخول → رجّع المستخدم لصفحة login
+        //if (!instructorId) {
+        //    alert("Please log in as an instructor first!");
+        //    window.location.href = "login.html"; // أو أي صفحة تسجيل عندك
+        //}
+
+        // لو موجود كمل تحميل الكورسات
+        const apiUrl = `https://localhost:44380/api/Course/instructor/${instructorId}`;
+
+    const coursesContainer = document.getElementById("courses");
+    let selectedCourseId = null;
+
+    async function loadCourses() {
+      const res = await fetch(apiUrl);
+      const courses = await res.json();
+
+      coursesContainer.innerHTML = "";
+      courses.forEach(c => {
+        const card = document.createElement("div");
+        card.className = "course-card";
+        card.innerHTML = `
+          <img src="${c.imageUrl}" alt="${c.title}">
+          <h3>${c.title}</h3>
+          <p>${c.description}</p>
+          <p><b>Duration:</b> ${c.duration} hours</p>
+          <p><b>Price:</b> $${c.price}</p>
+          <div class="actions">
+            <button onclick="openSessionModal(${c.id})">Add Session</button>
+            <button onclick="addAssessment(${c.id})">Add Assessment</button>
+          </div>
+        `;
+        coursesContainer.appendChild(card);
+      });
+    }
+
+    function openSessionModal(courseId) {
+      selectedCourseId = courseId;
+      document.getElementById("sessionModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("sessionModal").style.display = "none";
+    }
+
+    async function addSession() {
+      const title = document.getElementById("sessionTitle").value;
+      const description = document.getElementById("sessionDescription").value;
+
+      const response = await fetch("https://localhost:44380/api/Session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description, courseId: selectedCourseId })
+      });
+
+      if (response.ok) {
+        alert("Session added successfully!");
+        closeModal();
+      } else {
+        alert("Failed to add session");
+      }
+    }
+
+    function addAssessment(courseId) {
+      alert(`Assessment form for course ${courseId} coming soon...`);
+    }
+
+    loadCourses();
+    </script>
+</body>
+</html>

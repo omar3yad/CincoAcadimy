@@ -1,18 +1,7 @@
-﻿// Dummy data for sessions, assessments, and submissions
-const sessions = [
+﻿const sessions = [
 
 ];
-//let assessments = [
-//    { id: 1, title: "Quiz 1", description: "First quiz", dueDate: "2025-10-01", file: "quiz1.pdf", sessionId: 1 },
-//    { id: 2, title: "Assignment 1", description: "First assignment", dueDate: "2025-10-05", file: "", sessionId: 2 }
-//];
-//let submissions = [
-//    { id: 1, assessmentId: 1, studentName: "Alice Smith", file: "alice_quiz1.pdf", date: "2025-09-29", grade: "" },
-//    { id: 2, assessmentId: 1, studentName: "Bob Lee", file: "bob_quiz1.pdf", date: "2025-09-29", grade: "A" },
-//    { id: 3, assessmentId: 2, studentName: "Alice Smith", file: "alice_assignment1.pdf", date: "2025-10-05", grade: "" }
-//];
 
-// Utility: Show toast notification
 function showToast(message, isError = false) {
     const toast = document.getElementById('assessmentToast');
     toast.innerHTML = `<i class="fas fa-${isError ? 'times' : 'check'}-circle"></i> ${message}`;

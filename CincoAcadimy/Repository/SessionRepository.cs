@@ -103,5 +103,12 @@ namespace CincoAcadimy.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<Resource> AddAsync(Resource resource)
+        {
+            _context.Resources.Add(resource);
+            await _context.SaveChangesAsync();
+            return resource;
+        }
     }
 }

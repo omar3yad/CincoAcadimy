@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 
-namespace CincoAcadimy.Service.@interface
+namespace CincoAcadimy.IServices
 {
     public interface ISessionService
     {
@@ -16,7 +16,7 @@ namespace CincoAcadimy.Service.@interface
 
         Task<bool> UpdateCompletionAsync(int sessionId, int studentId, bool isCompleted);
 
-
+        Task<Resource> AddAsync(AddResourceDto dto);
         Task<StudentSessionAttendanceDto> GetStudentSessionAttendanceAsync(int sessionId, int studentId);
     }
 }

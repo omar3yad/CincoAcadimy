@@ -1,7 +1,7 @@
 ﻿using CincoAcadimy.DTOs;
 using CincoAcadimy.Models;
 using CincoAcadimy.Repository.@interface;
-using CincoAcadimy.Service.@interface;
+using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Service
 
@@ -146,6 +146,11 @@ namespace CincoAcadimy.Service
 
             studentCourse.IsEnrolled = dto.IsEnrolled;
             return await _repository.UpdateEnrollmentStatusAsync(studentCourse);
+        }
+
+        public async Task<IEnumerable<Course>> GetInstructorCoursesAsync(int instructorId)
+        {
+            return await _repository.GetInstructorCoursesAsync(instructorId);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace CincoAcadimy.Models
         // علاقة كل Resource بجلسة معينة
         [Required]
         public int SessionId { get; set; }
-        public required Session Session { get; set; }
+        public Session Session { get; set; }
 
         // Metadata
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow; // When the resource was added

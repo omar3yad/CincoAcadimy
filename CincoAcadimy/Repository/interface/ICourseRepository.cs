@@ -22,5 +22,8 @@ namespace CincoAcadimy.Repository.@interface
         Task<bool> UpdateEnrollmentStatusAsync(StudentCourse studentCourse);
         Task<bool> SaveChangesAsync();
 
+        Task<IEnumerable<Course>> GetInstructorCoursesAsync(int instructorId);
+
+
     }
 }
