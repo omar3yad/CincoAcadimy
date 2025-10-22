@@ -29,11 +29,19 @@ namespace CincoAcadimy.Service
 
         public async Task<string> RegisterAsync(RegisterDto model)
         {
+            // ensure unique email
+            var existingByEmail = await _userManager.FindByEmailAsync(model.Email);
+            if (existingByEmail != null)
+            {
+                return "This email is already registered. Please use another email.";
+            }
+
             var user = new ApplicationUser
             {
                 UserName = model.UserName,
                 FullName = model.UserName,
                 Email = model.Email,
+                PhoneNumber = model.Phone
             };
             try
             {
@@ -59,7 +67,10 @@ namespace CincoAcadimy.Service
 
         public async Task<AuthResponseDTO> LoginAsync(LoginDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
+                throw new UnauthorizedAccessException("Email and password are required");
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
             // Load student
             var student = await _context.Students
                 .FirstOrDefaultAsync(s => s.UserId == user.Id);

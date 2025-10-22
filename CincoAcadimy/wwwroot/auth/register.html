@@ -4,28 +4,86 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-    <div class="container">
-        <form id="registerForm" class="form">
-            <h2>Register</h2>
-            <input type="text" id="userName" placeholder="Username" required />
-            <input type="email" id="email" placeholder="Email" required />
-            <input type="password" id="password" placeholder="Password" required />
+    <link rel="stylesheet" href="/auth/style.css">
+    <style>
+        body{font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh}
+        .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.05);padding:28px;width:100%;max-width:420px}
+        h1{margin:0 0 16px 0;font-size:22px}
+        .field{margin-bottom:14px}
+        label{display:block;margin-bottom:6px;color:#111827;font-weight:600}
+        input{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+        button{width:100%;padding:12px          14px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer;transition:background .2s}
+        button:hover{background:#1d4ed8}
+        .msg{margin-top:12px;font-size:14px}
+        .msg.error{color:#b91c1c}
+        .msg.success{color:#065f46}
+    </style>
+<script>
+    async function register(event){
+        event.preventDefault();
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const userName = fullName; // username = full name
+        const password = document.getElementById('password').value;
 
-            <select id="role" required>
-                <option value="">Select Role</option>
-                <option value="Admin">Admin</option>
-                <option value="Student">Student</option>
-                <option value="HR">HR</option>
-            </select>
+        const msg = document.getElementById('msg');
+        msg.textContent = '';
+        msg.className = 'msg';
 
-            <button type="submit">Register</button>
-            <p id="registerMessage" class="message"></p>
-        </form>
-    </div>
+        if(!fullName || !email || !phone || !password){
+            msg.textContent = 'Please fill in all fields.';
+            msg.classList.add('error');
+            return;
+        }
 
-    <script src="register.js"></script>
-</body>
-</html>
+        try {
+            const res = await fetch('/api/Account/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fullName, email, phone, userName, password })
+            });
+
+            let data; try { data = await res.json(); } catch { data = {}; }
+
+            if (res.ok) {
+                msg.textContent = data.message || 'Registered successfully.';
+                msg.classList.add('success');
+                setTimeout(() => { window.location.href = '/auth/login.html'; }, 1000);
+            } else {
+                msg.textContent = data.error || data.message || 'Registration failed.';
+                msg.classList.add('error');
+            }
+        } catch (err) {
+            msg.textContent = err.message || 'Network error';
+            msg.classList.add('error');
+        }
+    }
+</script>
+    </head>
+    <body>
+        <div class="card">
+            <h1>Create your account</h1>
+            <form onsubmit="register(event)">
+                <div class="field">
+                    <label for="fullName">Full Name</label>
+                    <input id="fullName" type="text" placeholder="John Doe" />
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="john@example.com" />
+                </div>
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input id="phone" type="tel" placeholder="010-0000-0000" />
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="••••••••" />
+                </div>
+                <button type="submit">Register</button>
+                <div id="msg" class="msg"></div>
+            </form>
+        </div>
+    </body>
+    </html>

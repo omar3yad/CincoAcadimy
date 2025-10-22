@@ -1,14 +1,15 @@
 ﻿using CincoAcadimy.DTOs;
-using CincoAcadimy.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using CincoAcadimy.IServices;
-
+using CincoAcadimy.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CincoAcadimy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize] 
+
     public class AssessmentsController : ControllerBase
     {
   
@@ -19,6 +20,7 @@ namespace CincoAcadimy.Controllers
             _service = service;
         }
 
+        //[Authorize(Roles = "Admin, Instructor, HR")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Assessment>>> GetAll()
         {
@@ -26,6 +28,7 @@ namespace CincoAcadimy.Controllers
             return Ok(assessments);
         }
 
+        //[Authorize(Roles = "Admin, Instructor")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Assessment>> GetById(int id)
         {
@@ -34,6 +37,7 @@ namespace CincoAcadimy.Controllers
             return Ok(assessment);
         }
 
+        //[Authorize(Roles = "Admin, Instructor")]
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromForm] AddAssessmentDto dto)
         {
@@ -44,6 +48,7 @@ namespace CincoAcadimy.Controllers
             return Ok(new { message = "Assessment created successfully." });
         }
 
+        //[Authorize(Roles = "Admin, Instructor")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, CincoAcadimy.DTOs.AddAssessmentDto dto)
         {
@@ -51,6 +56,7 @@ namespace CincoAcadimy.Controllers
             return Ok(new { message = "Assessment updated successfully" });
         }
 
+        //[Authorize(Roles = "Admin, Instructor")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -58,6 +64,7 @@ namespace CincoAcadimy.Controllers
             return Ok(new { message = "Assessment deleted successfully" });
         }
 
+        //[Authorize(Roles = "Student")]
         [HttpPost("upload")]
         public async Task<IActionResult> Create(UploadDto request)
         {
@@ -65,6 +72,7 @@ namespace CincoAcadimy.Controllers
             return Ok(new { message = "Assessment uploaded successfully" });
         }
 
+        //[Authorize(Roles = "Admin, Instructor, Student, HR")]
         [HttpGet("session/{sessionId}")]
         public async Task<IActionResult> GetBySessionId(int sessionId)
         {
@@ -76,6 +84,8 @@ namespace CincoAcadimy.Controllers
             return Ok(assessments);
         }
 
+
+        //[Authorize(Roles = "Admin, HR, Instructor")]
         [HttpGet("StudentAssessmen")]
         public async Task<ActionResult<IEnumerable<StudentAssessmentReadDto>>> GetAllStudentAssessmenAsync()
         {
@@ -83,6 +93,7 @@ namespace CincoAcadimy.Controllers
             return Ok(result);
         }
 
+        //[Authorize(Roles = "Instructor")]
         [HttpPut("update-grade")]
         public async Task<IActionResult> UpdateGrade([FromBody] UpdateGradeDto dto)
         {

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using CincoAcadimy.Repository.@interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using CincoAcadimy.Authorization;
 using IResourceService = CincoAcadimy.IServices.IResourceService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +47,16 @@ builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 
 
 builder.Services.AddScoped<IResourceService, ResourceService>();
+
+// Configure Authorization Services
+builder.Services.AddAuthorization(options =>
+{
+    AuthorizationPolicies.ConfigurePolicies(options);
+});
+
+// Register Authorization Handlers
+builder.Services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -89,14 +101,14 @@ builder.Services.AddCors(options =>
 #region Swagger Setting
 builder.Services.AddSwaggerGen(swagger =>
 {
-    //This is to generate the Default UI of Swagger Documentation    
+    //Thisï¿½isï¿½toï¿½generateï¿½theï¿½Defaultï¿½UIï¿½ofï¿½Swaggerï¿½Documentationï¿½ï¿½ï¿½ï¿½
     swagger.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "ASP.NET 8 Web API",
+        Title = "ASP.NETï¿½8ï¿½Webï¿½API",
         Description = " ITI Projrcy"
     });
-    // To Enable authorization using Swagger (JWT)    
+    //ï¿½Toï¿½Enableï¿½authorizationï¿½usingï¿½Swaggerï¿½(JWT)ï¿½ï¿½ï¿½ï¿½
     swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -104,7 +116,7 @@ builder.Services.AddSwaggerGen(swagger =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+        Description = "Enterï¿½'Bearer'ï¿½[space]ï¿½andï¿½thenï¿½yourï¿½validï¿½tokenï¿½inï¿½theï¿½textï¿½inputï¿½below.\r\n\r\nExample:ï¿½\"Bearerï¿½eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
     });
     swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

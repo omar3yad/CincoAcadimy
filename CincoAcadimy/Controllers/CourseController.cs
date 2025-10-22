@@ -10,6 +10,7 @@ namespace CincoAcadimy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _service;
@@ -20,7 +21,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> GetAll()
         {
             var courses = await _service.GetAllCoursesAsync();
@@ -28,6 +29,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var course = await _service.GetCourseByIdAsync(id);
@@ -37,6 +39,8 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Create([FromBody] CreateCourseDto dto)
         {
             if (!ModelState.IsValid)
@@ -48,6 +52,8 @@ namespace CincoAcadimy.Controllers
 
 
         [HttpPut("{id}")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Update(int id, [FromBody] Course course)
         {
             if (id != course.Id)
@@ -58,6 +64,8 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteCourseAsync(id);
@@ -65,6 +73,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("ongoing/{studentId}")]
+        //[Authorize(Roles = "Student")]
         public async Task<IActionResult> GetOngoingCourses(int studentId)
         {
             IEnumerable<OngoingCourseDto> courses = await _service.GetOngoingCoursesAsync(studentId);
@@ -72,6 +81,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("{courseId}/students")]
+        //[Authorize(Roles = "Instructor,HR,Admin")]
         public async Task<IActionResult> GetStudentsByCourseId(int courseId)
         {
             var students = await _service.GetStudentsByCourseIdAsync(courseId);
@@ -79,6 +89,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("{id}/counts")]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> GetCourseCounts(int id)
         {
             var counts = await _service.GetCourseCountsAsync(id);
@@ -86,12 +97,14 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("student/{studentId}")]
+        //[Authorize(Roles = "Student")]
+
         public async Task<IActionResult> GetAllCoursesForStudent(int studentId)
         {
             var courses = await _service.GetAllCoursesForStudentAsync(studentId);
             return Ok(courses);
         }
-
+        //[Authorize(Roles = "Student")]
         [HttpGet("{courseId}/student/{studentId}")]
         public async Task<IActionResult> GetCourseForStudent(int courseId, int studentId)
         {
@@ -103,6 +116,8 @@ namespace CincoAcadimy.Controllers
 
 
         [HttpPut("update-enrollment")]
+        //[Authorize(Roles = "Admin,HR")]
+
         public async Task<IActionResult> UpdateEnrollmentStatus([FromBody] UpdateEnrollmentStatusDto dto)
         {
             var result = await _service.UpdateEnrollmentStatusAsync(dto);
@@ -113,6 +128,7 @@ namespace CincoAcadimy.Controllers
             return Ok("Enrollment status updated successfully.");
         }
 
+        //[Authorize(Roles = "Instructor, Admin")]
         [HttpGet("instructor/{instructorId}")]
         public async Task<IActionResult> GetInstructorCourses(int instructorId)
         {

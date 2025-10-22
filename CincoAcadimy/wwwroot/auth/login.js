@@ -1,15 +1,21 @@
 ﻿document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const userName = document.getElementById('userName').value;
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const message = document.getElementById('loginMessage');
 
+    if(!email || !password){
+        message.style.color = 'red';
+        message.innerText = 'Email and password are required.';
+        return;
+    }
+
     try {
-        const res = await fetch('https://localhost:44380/api/Account/login', {
+        const res = await fetch('/api/Account/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userName, password })
+            body: JSON.stringify({ email, password })
         });
 
         const data = await res.json();
@@ -27,11 +33,13 @@
 
             // Redirect to dashboard based on role
             if (data.role === "Admin") {
-                window.location.href = "/frontend/admin/index.html";
+                window.location.href = "/Admin/index.html";
             } else if (data.role === "Student") {
                 window.location.href = "/Students/html/student.html";
             } else if (data.role === "HR") {
-                window.location.href = "/frontend/hr/index.html";
+                window.location.href = "/HR/html/index.html";
+            } else if (data.role === "instructor") {
+                window.location.href = "/HR/html/index.html";
             }
         } else {
             message.style.color = 'red';

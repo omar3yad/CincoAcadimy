@@ -1,6 +1,6 @@
 ﻿using CincoAcadimy.DTOs;
-using CincoAcadimy.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using CincoAcadimy.IServices;
 
 namespace CincoAcadimy.Controllers
@@ -19,6 +19,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Student")]
         public async Task<IActionResult> Create([FromForm] CreatePaymentDto dto)
         {
             if (!ModelState.IsValid)
@@ -43,6 +44,7 @@ namespace CincoAcadimy.Controllers
 
 
         [HttpGet]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> GetAll()
         {
             var payments = await _service.GetAllAsync();
@@ -50,6 +52,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpGet("{id}")]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> Get(int id)
         {
             var payment = await _service.GetByIdAsync(id);
@@ -58,6 +61,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpDelete("{id}")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
@@ -65,6 +69,7 @@ namespace CincoAcadimy.Controllers
         }
 
         [HttpPut("status")]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdatePaymentStatusDto dto)
         {
             if (!ModelState.IsValid)
@@ -79,6 +84,7 @@ namespace CincoAcadimy.Controllers
 
         // ✅ New endpoint: Get all payments for a specific student
         [HttpGet("student/{studentId}")]
+        //[Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> GetPaymentsByStudentId(int studentId)
         {
             var payments = await _service.GetPaymentsByStudentIdAsync(studentId);
